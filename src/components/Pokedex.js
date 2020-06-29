@@ -21,6 +21,20 @@ class Pokedex extends React.Component {
   componentDidMount() {
     const { currentId } = this.state;
 
+    document.addEventListener('keydown', (e) => {
+      const { keyCode } = e;
+
+      // left arrow keyDown
+      if (keyCode === 37) {
+        this.handleLoadPrev();
+      }
+
+      // right arrow keyDown
+      if (keyCode === 39) {
+        this.handleLoadNext();
+      }
+    });
+
     this.fetchInfo(currentId, this.handleLoadInfo)
       .catch((error) => alert(error));
   }
