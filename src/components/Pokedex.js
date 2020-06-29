@@ -25,6 +25,14 @@ class Pokedex extends React.Component {
       .catch((error) => alert(error));
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { currentId } = this.state;
+    const { sprite } = this.state;
+
+    return currentId !== nextState.currentId
+      || (sprite === undefined && nextState.sprite !== undefined);
+  }
+
   componentDidUpdate() {
     const { currentId } = this.state;
 
@@ -65,7 +73,7 @@ class Pokedex extends React.Component {
 
   handleLoadInfo() {
     const {
-      name, weight, height, sprite,
+      currentId, name, weight, height, sprite,
     } = this.state;
 
     [name, weight, height, sprite].map((property) => {
@@ -81,11 +89,15 @@ class Pokedex extends React.Component {
           <img src={sprite} alt={name} />
         </div>
         <div id="buttons">
-          <button onClick={this.handleLoadPrev}>prev</button>
-          <button onClick={this.handleLoadNext}>next</button>
+          <button type="button" onClick={this.handleLoadPrev}>prev</button>
+          <button type="button" onClick={this.handleLoadNext}>next</button>
         </div>
         <div id="stats">
           <ul>
+            <li>
+              #
+              {currentId}
+            </li>
             <li>
               Name:
               {' '}
