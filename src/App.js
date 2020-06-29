@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { List } from './components/List';
+import Search from './components/Search';
 import Pokedex from './components/Pokedex';
 import 'normalize.css';
 
@@ -9,6 +10,7 @@ function App() {
     <div className="App">
       <List />
       <div id="main-container">
+        <Search />
         <Pokedex />
       </div>
     </div>
