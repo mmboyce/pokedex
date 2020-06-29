@@ -1,6 +1,6 @@
 import React from 'react';
 import './Pokedex.css';
-import { pokeApiURL } from './List.js';
+import { pokeApiURL } from './List';
 
 class Pokedex extends React.Component {
   constructor(props) {
@@ -58,6 +58,10 @@ class Pokedex extends React.Component {
 
       // Convert hectograms to kilograms
       weight *= 0.1;
+
+      // Round to 2 decimal places
+      height = Math.round(height * 100) / 100;
+      weight = Math.round(weight * 100) / 100;
 
       this.setState({
         name,
