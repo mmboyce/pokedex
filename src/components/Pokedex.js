@@ -29,9 +29,14 @@ class Pokedex extends React.Component {
     const { currentId } = this.state;
     const { sprite } = this.state;
 
-    return currentId !== nextState.currentId
-      || (sprite === undefined && nextState.sprite !== undefined)
-      || (sprite !== nextState.sprite);
+    const currentIdDoesNotMatchNextId = currentId !== nextState.currentId;
+    const currentSpriteIsUndefinedAndNextSpriteIsNot = sprite === undefined
+      && nextState.sprite !== undefined;
+    const nextSpriteIsDifferentFromCurrentSprite = sprite !== nextState.sprite;
+
+    return currentIdDoesNotMatchNextId
+      || currentSpriteIsUndefinedAndNextSpriteIsNot
+      || nextSpriteIsDifferentFromCurrentSprite;
   }
 
   componentDidUpdate() {
