@@ -1,4 +1,5 @@
 import React from 'react';
+import './List.css';
 
 const pokeApiURL = 'https://pokeapi.co/api/v2/pokemon';
 
@@ -14,7 +15,8 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchAllPokemon(this.loadPokemonList);
+    this.fetchAllPokemon(this.loadPokemonList)
+      .catch((error) => this.setState({ pokemonList: error }));
   }
 
   async fetchAllPokemon(callback) {
@@ -37,13 +39,18 @@ class List extends React.Component {
   }
 
   loadPokemonList() {
+    // This should be used as a callback to fetchAllPokemon
+
+    // Being called after the state changes as a callback lets us work with
+    // all the resultant state changes.
+
     const { results } = this.state;
 
     const pokemonList = results.map((pokemon) => {
       const { name } = pokemon;
       const { url } = pokemon;
-      const urlPieces = url.split('/');
 
+      const urlPieces = url.split('/');
       // the second to last piece of the url contains the ID of the pokemon
       const id = urlPieces[urlPieces.length - 2];
 
@@ -54,7 +61,10 @@ class List extends React.Component {
         return undefined;
       }
 
-      return <li>{name}</li>;
+      // This replaces all hyphens in the name with spaces
+      const formattedName = name.split('-').join(' ');
+
+      return <li className="sidebar-name">{formattedName}</li>;
     });
 
     this.setState({
@@ -66,7 +76,7 @@ class List extends React.Component {
     const { pokemonList } = this.state;
 
     return (
-      <div id="list">
+      <div id="sidebar">
         <p>List of Pokemon</p>
         <ol>
           {pokemonList}
