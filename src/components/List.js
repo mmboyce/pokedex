@@ -86,4 +86,4 @@ class List extends React.Component {
   }
 }
 
-export default List;
+export { List, pokeApiURL };

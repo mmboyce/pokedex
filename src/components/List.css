@@ -5,6 +5,7 @@
   max-width: 25vw;
   padding: 2vh 2vw;
   overflow-y: scroll;
+  background-color: lightgray;
 }
 
 .sidebar-name {
