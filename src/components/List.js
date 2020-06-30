@@ -1,11 +1,14 @@
 import React from 'react';
-import './List.css';
+import {
+  Link,
+} from 'react-router-dom';
 
-const pokeApiURL = 'https://pokeapi.co/api/v2/pokemon';
+import './List.css';
 
 class List extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
 
     };
@@ -20,8 +23,10 @@ class List extends React.Component {
   }
 
   async fetchAllPokemon(callback) {
+    const { pokeApiUrl } = this.props;
+
     // ?limit=-1 allows us to request all pokemon in the databses
-    const response = await fetch(`${pokeApiURL}?limit=-1`, { mode: 'cors' });
+    const response = await fetch(`${pokeApiUrl}?limit=-1`, { mode: 'cors' });
 
     if (response.ok) {
       const data = await response.json();
@@ -64,7 +69,13 @@ class List extends React.Component {
       // This replaces all hyphens in the name with spaces
       const formattedName = name.split('-').join(' ');
 
-      return <li className="sidebar-name">{formattedName}</li>;
+      return (
+        <li className="sidebar-name" key={id}>
+          <Link to={`/${id}`}>
+            {formattedName}
+          </Link>
+        </li>
+      );
     });
 
     this.setState({
@@ -86,4 +97,4 @@ class List extends React.Component {
   }
 }
 
-export { List, pokeApiURL };
+export default List;

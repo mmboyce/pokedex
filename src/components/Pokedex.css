@@ -20,3 +20,7 @@
 #stat-right {
   text-transform: capitalize;
 }
+
+#buttons a:last-of-type {
+  margin-left: 3em;
+}

@@ -1,67 +1,57 @@
 import React from 'react';
 import './Pokedex.css';
-import { pokeApiURL } from './List';
+import {
+  Link, Redirect,
+} from 'react-router-dom';
 
 class Pokedex extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      currentId: 1,
-      nextId: 2,
-      prevId: 807,
+      redirect: false,
     };
 
     this.fetchInfo = this.fetchInfo.bind(this);
     this.handleLoadInfo = this.handleLoadInfo.bind(this);
     this.handleLoadNext = this.handleLoadNext.bind(this);
     this.handleLoadPrev = this.handleLoadPrev.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
-    const { currentId } = this.state;
+    document.addEventListener('keydown', this.handleKeyDown);
 
-    document.addEventListener('keydown', (e) => {
-      const { keyCode } = e;
-
-      // left arrow keyDown
-      if (keyCode === 37) {
-        this.handleLoadPrev();
-      }
-
-      // right arrow keyDown
-      if (keyCode === 39) {
-        this.handleLoadNext();
-      }
-    });
-
-    this.fetchInfo(currentId, this.handleLoadInfo)
+    this.fetchInfo(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { currentId } = this.state;
-    const { sprite } = this.state;
+    const { id } = this.props;
+    const { sprite, redirect } = this.state;
 
-    const currentIdDoesNotMatchNextId = currentId !== nextState.currentId;
+    // These checks are to prevent against constant pulling of JSON and slowing down
+    // the application
+    const currentIdDoesNotMatchNextId = id !== nextProps.id;
     const currentSpriteIsUndefinedAndNextSpriteIsNot = sprite === undefined
       && nextState.sprite !== undefined;
     const nextSpriteIsDifferentFromCurrentSprite = sprite !== nextState.sprite;
+    const redirectIsNecessary = redirect === false && nextState.redirect !== false;
 
     return currentIdDoesNotMatchNextId
       || currentSpriteIsUndefinedAndNextSpriteIsNot
-      || nextSpriteIsDifferentFromCurrentSprite;
+      || nextSpriteIsDifferentFromCurrentSprite
+      || redirectIsNecessary;
   }
 
   componentDidUpdate() {
-    const { currentId } = this.state;
-
-    this.fetchInfo(currentId, this.handleLoadInfo)
+    this.fetchInfo(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
 
-  async fetchInfo(id, callback) {
-    const response = await fetch(`${pokeApiURL}/${id}`);
+  async fetchInfo(callback) {
+    const { id, pokeApiUrl } = this.props;
+
+    const response = await fetch(`${pokeApiUrl}/${id}`);
 
     if (response.ok) {
       const data = await response.json();
@@ -83,10 +73,12 @@ class Pokedex extends React.Component {
       weight = Math.round(weight * 100) / 100;
 
       this.setState({
+        id,
         name,
         weight,
         height,
         sprite,
+        redirect: false,
       });
     } else {
       throw new Error(response.status);
@@ -97,7 +89,7 @@ class Pokedex extends React.Component {
 
   handleLoadInfo() {
     const {
-      currentId, name, weight, height, sprite,
+      id, name, weight, height, sprite,
     } = this.state;
 
     [name, weight, height, sprite].map((property) => {
@@ -111,14 +103,14 @@ class Pokedex extends React.Component {
       <div id="pokedex-content">
         <p>
           #
-          {currentId}
+          {id}
         </p>
         <div id="display">
           <img src={sprite} alt={name} />
         </div>
         <div id="buttons">
-          <button type="button" onClick={this.handleLoadPrev}>prev</button>
-          <button type="button" onClick={this.handleLoadNext}>next</button>
+          <Link to={`/${this.handleLoadPrev()}`}>Prev</Link>
+          <Link to={`/${this.handleLoadNext()}`}>Next</Link>
         </div>
         <div id="stats">
           <ul id="stat-left">
@@ -145,55 +137,51 @@ class Pokedex extends React.Component {
   }
 
   handleLoadNext() {
-    const { currentId, prevId, nextId } = this.state;
-    let newCurr = currentId;
-    let newPrev = prevId;
-    let newNext = nextId;
+    const { id } = this.props;
+    const newId = +id + 1;
 
-    if (currentId === 806) {
-      newCurr += 1;
-      newPrev = newCurr - 1;
-      newNext = 1;
-    } else {
-      newCurr = nextId;
-      newPrev = currentId;
-      newNext = newCurr + 1;
-    }
-
-    this.setState({
-      currentId: newCurr,
-      prevId: newPrev,
-      nextId: newNext,
-    });
+    return newId;
   }
 
   handleLoadPrev() {
-    const { currentId, prevId, nextId } = this.state;
-    let newCurr = currentId;
-    let newPrev = prevId;
-    let newNext = nextId;
+    const { id } = this.props;
+    const newId = id - 1;
 
-    if (currentId === 2) {
-      newCurr -= 1;
-      newPrev = 807;
-      newNext = newCurr + 1;
-    } else {
-      newCurr = prevId;
-      newPrev = newCurr - 1;
-      newNext = currentId;
+    return newId;
+  }
+
+  handleKeyDown(e) {
+    const { keyCode } = e;
+    const prev = `/${this.handleLoadPrev()}`;
+    const next = `/${this.handleLoadNext()}`;
+    let redirect = false;
+
+    // left arrow keyDown
+    if (keyCode === 37) {
+      redirect = prev;
+    }
+
+    // right arrow keyDown
+    if (keyCode === 39) {
+      redirect = next;
     }
 
     this.setState({
-      currentId: newCurr,
-      prevId: newPrev,
-      nextId: newNext,
+      redirect,
     });
   }
 
   render() {
+    // if redirect is not false, then we need to redirect to where the
+    // key press has indicated.
+    // This is workaround for useHistory not being available to event listeners.
+    const { redirect } = this.state;
+
+    const redirectTo = <Redirect to={redirect} />;
+
     return (
       <div id="pokedex">
-        {this.handleLoadInfo()}
+        {redirect ? redirectTo : this.handleLoadInfo()}
       </div>
     );
   }

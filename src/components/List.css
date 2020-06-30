@@ -9,8 +9,20 @@
 }
 
 .sidebar-name {
-  text-transform: capitalize;
   padding: 1%;
+}
+
+.sidebar-name > button {
+  text-transform: capitalize;
+  border: none;
+  background-color: unset;
+  color: rgb(97, 96, 96);
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-name:hover > button {
+  color: red;
 }
 
 .sidebar-name:hover {
