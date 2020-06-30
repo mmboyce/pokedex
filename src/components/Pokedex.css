@@ -1,3 +1,22 @@
 #pokedex {
   background-color: lightgray;
 }
+
+#stats {
+  display: flex;
+  flex-direction: row;
+  font: monospace;
+}
+
+#stats > #stat-left,
+#stats > #stat-right {
+  list-style: none;
+}
+
+#stat-left {
+  padding: 0;
+}
+
+#stat-right {
+  text-transform: capitalize;
+}

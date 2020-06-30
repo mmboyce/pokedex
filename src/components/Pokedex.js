@@ -109,6 +109,10 @@ class Pokedex extends React.Component {
 
     return (
       <div id="pokedex-content">
+        <p>
+          #
+          {currentId}
+        </p>
         <div id="display">
           <img src={sprite} alt={name} />
         </div>
@@ -117,27 +121,22 @@ class Pokedex extends React.Component {
           <button type="button" onClick={this.handleLoadNext}>next</button>
         </div>
         <div id="stats">
-          <ul>
+          <ul id="stat-left">
+            <li>Name:</li>
+            <li>Height:</li>
+            <li>Weight:</li>
+          </ul>
+          <ul id="stat-right">
             <li>
-              #
-              {currentId}
-            </li>
-            <li>
-              Name:
-              {' '}
               {name}
             </li>
             <li>
-              Weight:
-              {' '}
-              {weight}
-              kg
-            </li>
-            <li>
-              Height:
-              {' '}
               {height}
               m
+            </li>
+            <li>
+              {weight}
+              kg
             </li>
           </ul>
         </div>
@@ -194,7 +193,6 @@ class Pokedex extends React.Component {
   render() {
     return (
       <div id="pokedex">
-        <p>pokedex</p>
         {this.handleLoadInfo()}
       </div>
     );
