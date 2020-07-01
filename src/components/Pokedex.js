@@ -21,7 +21,7 @@ class Pokedex extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
 
-    this.fetchInfo(this.handleLoadInfo)
+    this.fetchInfo().then(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
 
@@ -48,7 +48,7 @@ class Pokedex extends React.Component {
       .catch((error) => alert(error));
   }
 
-  async fetchInfo(callback) {
+  async fetchInfo() {
     const { id, pokeApiUrl } = this.props;
 
     const response = await fetch(`${pokeApiUrl}/${id}`);
@@ -83,8 +83,6 @@ class Pokedex extends React.Component {
     } else {
       throw new Error(response.status);
     }
-
-    callback();
   }
 
   handleLoadInfo() {
