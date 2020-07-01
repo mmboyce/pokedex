@@ -12,7 +12,7 @@
   padding: 1%;
 }
 
-.sidebar-name > button {
+.sidebar-name > a {
   text-transform: capitalize;
   border: none;
   background-color: unset;
@@ -21,7 +21,7 @@
   text-align: left;
 }
 
-.sidebar-name:hover > button {
+.sidebar-name:hover > a {
   color: red;
 }
 
