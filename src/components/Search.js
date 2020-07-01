@@ -9,17 +9,18 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-
     this.state = {
       redirect: false,
     };
+
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
     this.setState({
       input: e.target.value,
+      redirect: false,
     });
   }
 
@@ -44,28 +45,22 @@ class Search extends React.Component {
   render() {
     const { redirect } = this.state;
 
-    const shouldRedirect = redirect !== false;
-
-    const body = shouldRedirect
-      ? <Redirect to={`/${redirect}`} />
-      : (
-        <>
-          <div id="search-box">
-            <form onSubmit={this.handleSearch}>
-              <input onChange={this.handleChange} placeholder="Search Pokemon..." />
-            </form>
-          </div>
-          <div id="search-dropbox">
-            <ul>
-              { /* list goes here */}
-            </ul>
-          </div>
-        </>
-      );
+    const redirectTo = redirect === false ? (<></>) : (<Redirect to={`/${redirect}`} />);
 
     return (
       <div id="search-container">
-        {body}
+        <div id="search-box">
+          {redirectTo}
+          <form onSubmit={this.handleSearch}>
+            <input onChange={this.handleChange} placeholder="Search Pokemon..." />
+          </form>
+        </div>
+        <div id="search-dropbox">
+          <ul>
+            { /* list goes here */}
+          </ul>
+        </div>
+
       </div>
     );
   }
