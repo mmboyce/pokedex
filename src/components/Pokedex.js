@@ -1,8 +1,11 @@
 import React from 'react';
-import './Pokedex.css';
+import PropTypes from 'prop-types';
 import {
-  Link, Redirect,
+  Link,
+  Redirect,
 } from 'react-router-dom';
+
+import './Pokedex.css';
 
 class Pokedex extends React.Component {
   constructor(props) {
@@ -179,5 +182,10 @@ class Pokedex extends React.Component {
     );
   }
 }
+
+Pokedex.propTypes = {
+  id: PropTypes.string.isRequired,
+  pokeApiUrl: PropTypes.string.isRequired,
+};
 
 export default Pokedex;

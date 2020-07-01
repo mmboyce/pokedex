@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Link,
 } from 'react-router-dom';
@@ -54,5 +55,17 @@ class List extends React.Component {
     );
   }
 }
+
+List.propTypes = {
+  // For some reason this gives a message in the console about being supplied an object
+  // when expecting an array, and expecting an array when being supplied an object.
+  results: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+};
 
 export default List;
