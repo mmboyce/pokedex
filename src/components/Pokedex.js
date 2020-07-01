@@ -13,8 +13,7 @@ class Pokedex extends React.Component {
 
     this.fetchInfo = this.fetchInfo.bind(this);
     this.handleLoadInfo = this.handleLoadInfo.bind(this);
-    this.handleLoadNext = this.handleLoadNext.bind(this);
-    this.handleLoadPrev = this.handleLoadPrev.bind(this);
+    this.handleLoadChange = this.handleLoadChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
@@ -97,6 +96,9 @@ class Pokedex extends React.Component {
       return property;
     });
 
+    const prev = this.handleLoadChange(-1);
+    const next = this.handleLoadChange(+1);
+
     return (
       <div id="pokedex-content">
         <p>
@@ -107,8 +109,8 @@ class Pokedex extends React.Component {
           <img src={sprite} alt={name} />
         </div>
         <div id="buttons">
-          <Link to={`/${this.handleLoadPrev()}`}>Prev</Link>
-          <Link to={`/${this.handleLoadNext()}`}>Next</Link>
+          <Link to={`/${prev}`}>Prev</Link>
+          <Link to={`/${next}`}>Next</Link>
         </div>
         <div id="stats">
           <ul id="stat-left">
@@ -134,24 +136,17 @@ class Pokedex extends React.Component {
     );
   }
 
-  handleLoadNext() {
+  handleLoadChange(change) {
     const { id } = this.props;
-    const newId = +id + 1;
-
-    return newId;
-  }
-
-  handleLoadPrev() {
-    const { id } = this.props;
-    const newId = id - 1;
+    const newId = +id + change;
 
     return newId;
   }
 
   handleKeyDown(e) {
     const { keyCode } = e;
-    const prev = `/${this.handleLoadPrev()}`;
-    const next = `/${this.handleLoadNext()}`;
+    const prev = `/${this.handleLoadChange(-1)}`;
+    const next = `/${this.handleLoadChange(1)}`;
     let redirect = false;
 
     // left arrow keyDown
