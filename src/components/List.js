@@ -13,66 +13,24 @@ class List extends React.Component {
 
     };
 
-    this.fetchAllPokemon = this.fetchAllPokemon.bind(this);
     this.loadPokemonList = this.loadPokemonList.bind(this);
   }
 
   componentDidMount() {
-    this.fetchAllPokemon(this.loadPokemonList)
-      .catch((error) => this.setState({ pokemonList: error }));
-  }
-
-  async fetchAllPokemon(callback) {
-    const { pokeApiUrl } = this.props;
-
-    // ?limit=-1 allows us to request all pokemon in the databses
-    const response = await fetch(`${pokeApiUrl}?limit=-1`, { mode: 'cors' });
-
-    if (response.ok) {
-      const data = await response.json();
-
-      const { results } = data;
-
-      this.setState({
-        results,
-      });
-    } else {
-      throw new Error(response.status);
-    }
-
-    callback();
+    this.loadPokemonList();
   }
 
   loadPokemonList() {
-    // This should be used as a callback to fetchAllPokemon
-
-    // Being called after the state changes as a callback lets us work with
-    // all the resultant state changes.
-
-    const { results } = this.state;
+    const { results } = this.props;
 
     const pokemonList = results.map((pokemon) => {
       const { name } = pokemon;
-      const { url } = pokemon;
-
-      const urlPieces = url.split('/');
-      // the second to last piece of the url contains the ID of the pokemon
-      const id = urlPieces[urlPieces.length - 2];
-
-      if (id > 10000) {
-      // remove alternates from results
-      // once the ID's cease to be sequential and jump to 5 digit numbers,
-      // these pokemon should not be included
-        return undefined;
-      }
-
-      // This replaces all hyphens in the name with spaces
-      const formattedName = name.split('-').join(' ');
+      const { id } = pokemon;
 
       return (
         <li className="sidebar-name" key={id}>
           <Link to={`/${id}`}>
-            {formattedName}
+            {name}
           </Link>
         </li>
       );
