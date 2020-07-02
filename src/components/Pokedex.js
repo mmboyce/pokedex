@@ -147,18 +147,18 @@ class Pokedex extends React.Component {
   }
 
   handleKeyDown(e) {
-    const { keyCode } = e;
+    const { keyCode, altKey } = e;
     const prev = `/${this.handleLoadChange(-1)}`;
     const next = `/${this.handleLoadChange(1)}`;
     let redirect = false;
 
-    // left arrow keyDown
-    if (keyCode === 37) {
+    // alt+, keyDown
+    if (altKey && keyCode === 188) {
       redirect = prev;
     }
 
-    // right arrow keyDown
-    if (keyCode === 39) {
+    // alt+. keyDown
+    if (altKey && keyCode === 190) {
       redirect = next;
     }
 
