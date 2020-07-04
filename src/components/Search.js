@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Autocomplete from 'react-autocomplete';
 
 import PropTypes from 'prop-types';
@@ -8,6 +8,14 @@ import './Search.css';
 
 function handleMatchPokemon(pokemon, inputValue) {
   return pokemon.name.indexOf(inputValue.toLowerCase()) !== -1;
+}
+
+function capitalizeString(toCapitalize) {
+  const split = toCapitalize.split('');
+
+  split[0] = split[0].toUpperCase();
+
+  return split.join('');
 }
 
 class Search extends React.Component {
@@ -54,11 +62,6 @@ class Search extends React.Component {
 
     return (
       <div id="search-container">
-        {/* <div id="search-box">
-          {redirectTo}
-          <form onSubmit={this.handleSearch}>
-            <input onChange={this.handleChange} placeholder="Search Pokemon..." />
-          </form> */}
         <Autocomplete
           value={value}
           inputProps={{ id: 'search-box', placeholder: 'Search Pokemon...' }}
@@ -67,7 +70,7 @@ class Search extends React.Component {
           getItemValue={(pokemon) => pokemon.name}
           shouldItemRender={handleMatchPokemon}
           onChange={this.handleChange}
-          onSelect={(input) => this.setState({ value: input }, this.handleSearch)}
+          onSelect={(input) => this.setState({ value: capitalizeString(input) }, this.handleSearch)}
           renderMenu={(children) => (
             <div className="menu">
               {children}
@@ -83,7 +86,6 @@ class Search extends React.Component {
           )}
         />
         {redirectTo}
-        {/* </div> */}
       </div>
     );
   }

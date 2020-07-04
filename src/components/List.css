@@ -29,6 +29,11 @@
   background-color: wheat;
 }
 
+.item-highlighted,
+.not-highlighted {
+  text-transform: capitalize;
+}
+
 .item-highlighted {
   color: red;
   background-color: lightgray;
