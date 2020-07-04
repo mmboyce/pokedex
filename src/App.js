@@ -15,6 +15,9 @@ import Pokedex from './components/Pokedex';
 import './App.css';
 import 'normalize.css';
 
+// TODO: Include id in local storage
+// TODO: Test all functions
+
 const pokeApiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
 function getIdFromUrl(url) {
@@ -74,6 +77,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // TODO: Handle errors differently
     this.fetchAllPokemon().then(this.formatResults).catch((error) => { console.log(error); });
   }
 
@@ -156,6 +160,7 @@ class App extends React.Component {
       </Router>
     );
 
+    // TODO: Include Loading Component to display before app loads
     const body = loaded ? loadedBody : (<div>Loading...</div>);
 
     return (
