@@ -28,6 +28,16 @@ function getIdFromUrl(url) {
   return id;
 }
 
+function LoadingScreen() {
+  return (
+    <div id="loading-screen">
+      <div id="loading-center">
+        Pokedex
+      </div>
+    </div>
+  );
+}
+
 function MainContainer(props) {
   const { id } = useParams();
   const { results } = props;
@@ -160,8 +170,7 @@ class App extends React.Component {
       </Router>
     );
 
-    // TODO LOAD: Include Loading Component to display before app loads
-    const body = loaded ? loadedBody : (<div>Loading...</div>);
+    const body = loaded ? loadedBody : <LoadingScreen />;
 
     return (
       <div className="App">
