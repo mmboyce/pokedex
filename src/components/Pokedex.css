@@ -24,3 +24,74 @@
 #buttons a:last-of-type {
   margin-left: 3em;
 }
+
+.type {
+  text-transform: capitalize;
+  color: white;
+  border-radius: 6px;
+  padding: 4%;
+}
+
+#types {
+  display: flex;
+  flex-direction: row;
+}
+
+/* type letter colorings below */
+.normal {
+  background-color: #a8a878;
+}
+.fighting {
+  background-color: #c03028;
+}
+.flying {
+  background-color: #6d5e9c;
+}
+.poison {
+  background-color: #8b378b;
+}
+.ground {
+  background-color: #e0c068;
+}
+.rock {
+  background-color: #b8a038;
+}
+.bug {
+  background-color: #a8b820;
+}
+.ghost {
+  background-color: #705898;
+}
+.steel {
+  background-color: #b8b8d0;
+}
+.fire {
+  background-color: #f08336;
+}
+.water {
+  background-color: #6890f1;
+}
+.grass {
+  background-color: #7ccd6b;
+}
+.electric {
+  background-color: #fad430;
+}
+.psychic {
+  background-color: #f85888;
+}
+.ice {
+  background-color: #98d8d8;
+}
+.dragon {
+  background-color: #7038f8;
+}
+.dark {
+  background-color: #705848;
+}
+.fairy {
+  background-color: #ee99ac;
+}
+.unknown {
+  background-color: #68a090;
+}

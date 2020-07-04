@@ -7,6 +7,20 @@ import {
 
 import './Pokedex.css';
 
+function Type(props) {
+  const { types } = props;
+
+  const typesText = types.map((typeObject) => typeObject.type.name);
+
+  const typeElement = typesText.map((text) => <div className={`type ${text}`}>{text}</div>);
+
+  return (
+    <div id="types">
+      {typeElement}
+    </div>
+  );
+}
+
 class Pokedex extends React.Component {
   constructor(props) {
     super(props);
@@ -48,7 +62,7 @@ class Pokedex extends React.Component {
 
   componentDidUpdate() {
   // TODO TEST: Handle errors differently
-    this.fetchInfo(this.handleLoadInfo)
+    this.fetchInfo().then(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
 
@@ -62,6 +76,8 @@ class Pokedex extends React.Component {
 
       let { name, weight, height } = data;
       const sprite = data.sprites.front_default;
+
+      const { types } = data;
 
       // Replace hyphens in names with spaes
       name = name.split('-').join(' ');
@@ -82,6 +98,7 @@ class Pokedex extends React.Component {
         weight,
         height,
         sprite,
+        types,
         redirect: false,
       });
     } else {
@@ -91,7 +108,7 @@ class Pokedex extends React.Component {
 
   handleLoadInfo() {
     const {
-      id, name, weight, height, sprite,
+      id, name, weight, height, sprite, types,
     } = this.state;
 
     [name, weight, height, sprite].map((property) => {
@@ -113,7 +130,7 @@ class Pokedex extends React.Component {
         <div id="display">
           <img src={sprite} alt={name} />
           {/* TODO DISPLAY: Have a Loading img for when sprites are changing */}
-          {/* TODO DISPLAY: Include Type and color background accordingly */}
+          {types !== undefined ? <Type types={types} /> : ''}
         </div>
         <div id="buttons">
           <Link to={`/${prev}`}>Prev</Link>
@@ -189,6 +206,17 @@ class Pokedex extends React.Component {
     );
   }
 }
+Type.propTypes = {
+  types: PropTypes.arrayOf(
+    PropTypes.shape({
+      slot: PropTypes.number.isRequired,
+      type: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  ).isRequired,
+};
 
 Pokedex.propTypes = {
   id: PropTypes.string.isRequired,
