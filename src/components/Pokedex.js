@@ -23,7 +23,7 @@ class Pokedex extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
 
-    // TODO: Handle errors differently
+    // TODO TEST: Handle errors differently
     this.fetchInfo().then(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
@@ -47,7 +47,7 @@ class Pokedex extends React.Component {
   }
 
   componentDidUpdate() {
-  // TODO: Handle errors differently
+  // TODO TEST: Handle errors differently
     this.fetchInfo(this.handleLoadInfo)
       .catch((error) => alert(error));
   }
@@ -112,8 +112,8 @@ class Pokedex extends React.Component {
         </p>
         <div id="display">
           <img src={sprite} alt={name} />
-          {/* TODO: Have a Loading img for when sprites are changing */}
-          {/* TODO: Include Type and color background accordingly */}
+          {/* TODO DISPLAY: Have a Loading img for when sprites are changing */}
+          {/* TODO DISPLAY: Include Type and color background accordingly */}
         </div>
         <div id="buttons">
           <Link to={`/${prev}`}>Prev</Link>
@@ -126,7 +126,7 @@ class Pokedex extends React.Component {
             <li>Weight:</li>
           </ul>
           <ul id="stat-right">
-            {/* TODO: While awaiting new stats, have these say LOADING */}
+            {/* TODO DISPLAY: While awaiting new stats, have these say LOADING */}
             <li>
               {name}
             </li>
@@ -138,8 +138,8 @@ class Pokedex extends React.Component {
               {weight}
               kg
             </li>
-            {/* TODO: Evolves from */}
-            {/* TODO: Evolves to */}
+            {/* TODO DISPLAY: Evolves from */}
+            {/* TODO DISPLAY: Evolves to */}
           </ul>
         </div>
       </div>
