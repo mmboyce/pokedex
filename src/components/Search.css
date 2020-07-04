@@ -1,3 +1,8 @@
 #search-box > input {
   border: none;
 }
+
+.item:nth-of-type(n + 16) {
+  /* limit to 15 results */
+  display: none;
+}
