@@ -1,9 +1,14 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
+import Autocomplete from 'react-autocomplete';
 
 import PropTypes from 'prop-types';
 
 import './Search.css';
+
+function handleMatchPokemon(pokemon, inputValue) {
+  return pokemon.name.indexOf(inputValue.toLowerCase()) !== -1;
+}
 
 class Search extends React.Component {
   constructor(props) {
@@ -11,6 +16,7 @@ class Search extends React.Component {
 
     this.state = {
       redirect: false,
+      value: '',
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -19,17 +25,17 @@ class Search extends React.Component {
 
   handleChange(e) {
     this.setState({
-      input: e.target.value,
+      value: e.target.value,
       redirect: false,
     });
   }
 
-  handleSearch(e) {
+  handleSearch() {
     const { results } = this.props;
-    const { input } = this.state;
+    const { value } = this.state;
     let findId = false;
 
-    const match = results.find((pokemon) => pokemon.name === input.toLowerCase());
+    const match = results.find((pokemon) => pokemon.name === value.toLowerCase());
 
     if (match !== undefined) {
       findId = match.id;
@@ -38,29 +44,46 @@ class Search extends React.Component {
     this.setState({
       redirect: findId,
     });
-
-    e.preventDefault();
   }
 
   render() {
-    const { redirect } = this.state;
+    const { redirect, value } = this.state;
+    const { results } = this.props;
 
     const redirectTo = redirect === false ? (<></>) : (<Redirect to={`/${redirect}`} />);
 
     return (
       <div id="search-container">
-        <div id="search-box">
+        {/* <div id="search-box">
           {redirectTo}
           <form onSubmit={this.handleSearch}>
             <input onChange={this.handleChange} placeholder="Search Pokemon..." />
-          </form>
-        </div>
-        <div id="search-dropbox">
-          <ul>
-            { /* list goes here */}
-          </ul>
-        </div>
-
+          </form> */}
+        <Autocomplete
+          value={value}
+          inputProps={{ id: 'search-box', placeholder: 'Search Pokemon...' }}
+          wrapperStyle={{ position: 'fixed' }}
+          items={results}
+          getItemValue={(pokemon) => pokemon.name}
+          shouldItemRender={handleMatchPokemon}
+          onChange={this.handleChange}
+          onSelect={(input) => this.setState({ value: input }, this.handleSearch)}
+          renderMenu={(children) => (
+            <div className="menu">
+              {children}
+            </div>
+          )}
+          renderItem={(pokemon, isHighlighted) => (
+            <div
+              className={`item ${isHighlighted ? 'item-highlighted' : 'not-highlighted'}`}
+              key={pokemon.name}
+            >
+              {pokemon.name}
+            </div>
+          )}
+        />
+        {redirectTo}
+        {/* </div> */}
       </div>
     );
   }

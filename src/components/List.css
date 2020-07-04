@@ -28,3 +28,13 @@
 .sidebar-name:hover {
   background-color: wheat;
 }
+
+.item-highlighted {
+  color: red;
+  background-color: lightgray;
+}
+
+.not-highlighted {
+  color: black;
+  background-color: white;
+}
