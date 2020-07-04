@@ -28,9 +28,11 @@ function getIdFromUrl(url) {
   return id;
 }
 
-function LoadingScreen() {
+function LoadingScreen(props) {
+  const { className } = props;
+
   return (
-    <div id="loading-screen">
+    <div id="loading-screen" className={className}>
       <div id="loading-center">
         Pokedex
       </div>
@@ -61,17 +63,6 @@ function MainContainer(props) {
     </div>
   );
 }
-MainContainer.propTypes = {
-  // For some reason this gives a message in the console about being supplied an object
-  // when expecting an array, and expecting an array when being supplied an object.
-  results: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  ).isRequired,
-};
 
 class App extends React.Component {
   constructor(props) {
@@ -170,14 +161,40 @@ class App extends React.Component {
       </Router>
     );
 
-    const body = loaded ? loadedBody : <LoadingScreen />;
+    const loadingScreen = loaded
+      ? <LoadingScreen className="loaded" />
+      : <LoadingScreen />;
+
+    const appBody = loaded
+      ? loadedBody : <></>;
 
     return (
       <div className="App">
-        {body}
+        {loadingScreen}
+        {appBody}
       </div>
     );
   }
 }
+
+LoadingScreen.propTypes = {
+  className: PropTypes.string,
+};
+
+LoadingScreen.defaultProps = {
+  className: '',
+};
+
+MainContainer.propTypes = {
+  // For some reason this gives a message in the console about being supplied an object
+  // when expecting an array, and expecting an array when being supplied an object.
+  results: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
+};
 
 export default App;

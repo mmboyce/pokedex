@@ -13,11 +13,15 @@
 }
 
 #loading-screen {
+  position: fixed;
   display: flex;
   width: 100vw;
   height: 100vh;
   background-color: red;
   align-items: center;
+  z-index: 1000;
+  transition: opacity 0.8s;
+  transition-delay: 1.2s;
 }
 
 #loading-center {
@@ -28,4 +32,15 @@
   padding: 1em 2em;
   border-radius: 20px;
   margin: 0 auto;
+}
+
+.loaded {
+  opacity: 0;
+
+  /* make text not selectable */
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
