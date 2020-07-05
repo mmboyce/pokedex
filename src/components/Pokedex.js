@@ -123,11 +123,11 @@ class Pokedex extends React.Component {
 
     return (
       <div id="pokedex-content">
-        <p id="id-text">
-          #
-          {id}
-        </p>
         <div id="display">
+          <p id="id-text">
+            #
+            {id}
+          </p>
           <img src={sprite} alt={name} />
           {/* TODO DISPLAY: Have a Loading img for when sprites are changing */}
           {types !== undefined ? <Type types={types} /> : ''}
