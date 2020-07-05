@@ -47,7 +47,7 @@ class List extends React.Component {
 
     return (
       <div id="sidebar">
-        <p>List of Pokemon</p>
+        <p>List of Pokémon</p>
         <ol>
           {pokemonList}
         </ol>
