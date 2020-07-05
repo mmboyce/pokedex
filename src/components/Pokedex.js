@@ -137,12 +137,12 @@ class Pokedex extends React.Component {
           <Link to={`/${next}`}>Next</Link>
         </div>
         <div id="stats">
-          <ul id="stat-left">
+          <ul id="stat-left" className="stat-col">
             <li>Name:</li>
             <li>Height:</li>
             <li>Weight:</li>
           </ul>
-          <ul id="stat-right">
+          <ul id="stat-right" className="stat-col">
             {/* TODO DISPLAY: While awaiting new stats, have these say LOADING */}
             <li>
               {name}

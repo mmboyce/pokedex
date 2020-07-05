@@ -1,5 +1,27 @@
+#search-container {
+  margin: auto;
+}
+
 #search-box > input {
   border: none;
+}
+
+.menu {
+  position: absolute;
+
+  /* Have autocomplete results fit size of input box */
+  /* unprefixed */
+  width: stretch;
+  /* For Chrome */
+  width: -webkit-fill-available;
+  /* For Firefox */
+  width: -moz-available;
+}
+
+.item {
+  font-size: 1.2em;
+  padding-left: 4%;
+  border: 1px solid lightgray;
 }
 
 .item:nth-of-type(n + 16) {

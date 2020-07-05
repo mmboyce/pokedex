@@ -1,9 +1,11 @@
 #pokedex {
   background-color: #dadada;
-  width: 35vw;
-  height: 80vh;
+  width: 25%;
+  height: 65%;
   justify-content: center;
   display: flex;
+  margin: auto;
+  margin-top: 0;
 }
 
 #pokedex-content {
@@ -13,11 +15,16 @@
 }
 
 #id-text {
-  margin-bottom: auto;
+  margin: 5% 2%;
 }
 
 #display {
-  margin: auto;
+  background-color: #727272;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 40%;
+  border-radius: 7px;
 }
 
 #display img {
@@ -27,6 +34,8 @@
 
   /* nearest-neighbor upscaling, which is good for pixel art */
   image-rendering: crisp-edges;
+  margin: auto;
+  margin-bottom: 0;
 }
 
 #stats {
@@ -36,15 +45,16 @@
   background-color: #cbcbcb;
   align-self: stretch;
   margin-top: auto;
+  margin-bottom: 10%;
+  height: 35%;
+  font-size: 1.5em;
+  border-radius: 7px;
 }
 
-#stats > #stat-left,
-#stats > #stat-right {
+.stat-col {
   list-style: none;
-}
-
-#stat-left {
-  padding: 0;
+  margin: auto;
+  width: 50%;
 }
 
 #stat-right {
@@ -52,18 +62,24 @@
 }
 
 #buttons {
-  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  margin: 4% auto;
+  width: 100%;
 }
 
 #buttons a {
   text-decoration: none;
-  color: #e27be2;
-  background-color: #4e004e;
+  color: #4e004e;
+  background-color: #e27be2;
+  padding: 5.5%;
+  border-radius: 10px;
+  margin: auto;
 }
 
 #buttons a:hover {
-  background-color: #e27be2;
-  color: #ffffff;
+  background-color: #4e004e;
+  color: #aca8a8;
 }
 
 #buttons a:last-of-type {
@@ -74,12 +90,17 @@
   text-transform: capitalize;
   color: white;
   border-radius: 6px;
-  padding: 4%;
+  padding: 6px;
+  min-width: 80px;
+  text-align: center;
 }
 
 #types {
   display: flex;
   flex-direction: row;
+  margin: auto;
+  margin-top: 0;
+  font-size: 1.32em;
 }
 
 /* type letter colorings below */
