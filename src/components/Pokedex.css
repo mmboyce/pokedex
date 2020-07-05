@@ -8,6 +8,7 @@
   margin-top: 0;
   border-bottom: 3px solid #bababa;
   border-right: 3px solid #bababa;
+  border-radius: 3px;
   box-shadow: 0.6em 0.6em 0.7em 0.1em rgba(0, 0, 0, 0.486);
 }
 
@@ -28,6 +29,7 @@
   width: 100%;
   height: 40%;
   border-radius: 7px;
+  border: 2px groove #5f5f5f;
 }
 
 #display img {
@@ -49,13 +51,13 @@
   height: 35%;
   border-radius: 7px;
   align-self: stretch;
+  border: 2px solid #b9b9b9;
 }
 
 #stats {
   display: flex;
   flex-direction: column;
   font-family: monospace;
-  background-color: #cbcbcb;
   margin: auto;
   height: 30%;
   font-size: 1.25em;
@@ -93,11 +95,13 @@
   padding: 5.5%;
   border-radius: 10px;
   margin: auto;
+  border: 2px solid #d674d6;
 }
 
 #buttons a:hover {
   background-color: #4e004e;
-  color: #aca8a8;
+  color: white;
+  border-color: #2e002e;
 }
 
 #buttons a:last-of-type {
@@ -108,9 +112,15 @@
   text-transform: capitalize;
   color: white;
   border-radius: 6px;
+  border-style: solid;
+  border-width: 2px;
   padding: 6px;
   min-width: 80px;
   text-align: center;
+}
+
+.type:not(:first-child) {
+  margin-left: 2%;
 }
 
 #types {
