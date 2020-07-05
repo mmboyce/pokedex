@@ -123,7 +123,7 @@ class Pokedex extends React.Component {
 
     return (
       <div id="pokedex-content">
-        <p>
+        <p id="id-text">
           #
           {id}
         </p>

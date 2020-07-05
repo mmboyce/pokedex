@@ -65,7 +65,7 @@ class Search extends React.Component {
         <Autocomplete
           value={value}
           inputProps={{ id: 'search-box', placeholder: 'Search Pokemon...' }}
-          wrapperStyle={{ position: 'fixed' }}
+          wrapperStyle={{ position: 'relative' }}
           items={results}
           getItemValue={(pokemon) => pokemon.name}
           shouldItemRender={handleMatchPokemon}
