@@ -1,7 +1,7 @@
 #pokedex {
   background-color: #dadada;
-  width: 410px;
-  height: 593px;
+  width: 510px;
+  height: 700px;
   justify-content: center;
   display: flex;
   margin: auto;
@@ -36,9 +36,8 @@
 }
 
 #display img {
-  /* size of largest img*/
-  width: 128px;
-  height: 128px;
+  width: 150px;
+  height: 150px;
 
   /* nearest-neighbor upscaling, which is good for pixel art */
   image-rendering: crisp-edges;
@@ -72,9 +71,6 @@
   display: flex;
   display: row;
   width: 100%;
-}
-
-.stat-left {
 }
 
 .stat-right {
