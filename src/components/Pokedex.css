@@ -38,26 +38,41 @@
   margin-bottom: 0;
 }
 
-#stats {
+#stat-container {
   display: flex;
-  flex-direction: row;
-  font-family: monospace;
   background-color: #cbcbcb;
-  align-self: stretch;
   margin-top: auto;
   margin-bottom: 10%;
   height: 35%;
-  font-size: 1.5em;
   border-radius: 7px;
+  align-self: stretch;
 }
 
-.stat-col {
-  list-style: none;
+#stats {
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+  background-color: #cbcbcb;
   margin: auto;
-  width: 50%;
+  height: 30%;
+  font-size: 1.25em;
+  width: 90%;
 }
 
-#stat-right {
+.stat-line {
+  margin: auto;
+  display: flex;
+  display: row;
+  width: 100%;
+}
+
+.stat-left {
+}
+
+.stat-right {
+  margin: auto;
+  margin-right: 0;
+  text-align: right;
   text-transform: capitalize;
 }
 

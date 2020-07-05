@@ -136,28 +136,30 @@ class Pokedex extends React.Component {
           <Link to={`/${prev}`}>Prev</Link>
           <Link to={`/${next}`}>Next</Link>
         </div>
-        <div id="stats">
-          <ul id="stat-left" className="stat-col">
-            <li>Name:</li>
-            <li>Height:</li>
-            <li>Weight:</li>
-          </ul>
-          <ul id="stat-right" className="stat-col">
+        <div id="stat-container">
+          <div id="stats">
             {/* TODO DISPLAY: While awaiting new stats, have these say LOADING */}
-            <li>
-              {name}
-            </li>
-            <li>
-              {height}
-              m
-            </li>
-            <li>
-              {weight}
-              kg
-            </li>
-            {/* TODO DISPLAY: Evolves from */}
-            {/* TODO DISPLAY: Evolves to */}
-          </ul>
+            <div className="stat-line">
+              <div className="stat-left">Name:</div>
+              <div className="stat-right">
+                {name}
+              </div>
+            </div>
+            <div className="stat-line">
+              <div className="stat-left">Height:</div>
+              <div className="stat-right">
+                {height}
+                m
+              </div>
+            </div>
+            <div className="stat-line">
+              <div className="stat-left">Weight:</div>
+              <div className="stat-right">
+                {weight}
+                kg
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
