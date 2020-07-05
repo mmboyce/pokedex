@@ -34,7 +34,7 @@ function LoadingScreen(props) {
   return (
     <div id="loading-screen" className={className}>
       <div id="loading-center">
-        Pokedex
+        Pokédex
       </div>
     </div>
   );
