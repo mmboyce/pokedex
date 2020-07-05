@@ -6,6 +6,9 @@
   display: flex;
   margin: auto;
   margin-top: 0;
+  border-bottom: 3px solid #bababa;
+  border-right: 3px solid #bababa;
+  box-shadow: 0.6em 0.6em 0.7em 0.1em rgba(0, 0, 0, 0.486);
 }
 
 #pokedex-content {
