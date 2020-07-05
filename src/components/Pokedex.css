@@ -1,7 +1,7 @@
 #pokedex {
   background-color: #dadada;
-  width: 510px;
-  height: 700px;
+  min-width: 510px;
+  min-height: 700px;
   justify-content: center;
   display: flex;
   margin: auto;
