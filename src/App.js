@@ -45,13 +45,21 @@ function MainContainer(props) {
   const { results } = props;
   const limit = results.length;
 
-  let pokedex = <Pokedex id={id} pokeApiUrl={pokeApiUrl} />;
+  let pokedex = (
+    <Pokedex
+      resultsLength={limit}
+      id={id}
+      pokeApiUrl={pokeApiUrl}
+    />
+  );
 
-  if (id < 1) {
-    // If the ID param is less than 1 redirect to the last pokemon.
+  if (id > limit) {
+  // If the ID param is greater than the limit redirect to the last pokemon.
     pokedex = <Redirect to={`/${limit}`} />;
-  } else if (id > limit || (!(id <= 807) && !(id >= 1))) {
-    // If the ID param does not fall within the bounds, redirect to the first pokemon
+  } else if (id < 1 || (!(id <= 807) && !(id >= 1))) {
+    // If the ID param is less than 1 or does not fall within the bounds,
+    // redirect to the first pokemon.
+
     // Useful for invalid params instead of a 404
     pokedex = <Redirect to="/1" />;
   }

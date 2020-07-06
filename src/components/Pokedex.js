@@ -166,8 +166,14 @@ class Pokedex extends React.Component {
   }
 
   handleLoadChange(change) {
-    const { id } = this.props;
-    const newId = +id + change;
+    const { id, resultsLength } = this.props;
+    let newId = +id + change;
+
+    if (newId < 1) {
+      newId = resultsLength;
+    } else if (newId > resultsLength) {
+      newId = 1;
+    }
 
     return newId;
   }
@@ -223,6 +229,7 @@ Type.propTypes = {
 Pokedex.propTypes = {
   id: PropTypes.string.isRequired,
   pokeApiUrl: PropTypes.string.isRequired,
+  resultsLength: PropTypes.number.isRequired,
 };
 
 export default Pokedex;
