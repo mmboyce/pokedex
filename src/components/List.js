@@ -63,7 +63,7 @@ class List extends React.Component {
 
     return (
       <div id="sidebar">
-        <p>List of Pokémon</p>
+        <p>Pokédex Entries</p>
         {pokemonList}
       </div>
     );
