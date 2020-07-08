@@ -29,11 +29,16 @@ class List extends React.Component {
       const { id } = pokemon;
 
       return (
-        <li className="sidebar-name" key={id}>
-          <Link to={`/${id}`}>
+        <Link to={`/${id}`} className="sidebar-link">
+          <div className="sidebar-item">
+            <div className="sidebar-id">
+              #
+              {id}
+              :
+            </div>
             {name}
-          </Link>
-        </li>
+          </div>
+        </Link>
       );
     });
 
@@ -48,9 +53,7 @@ class List extends React.Component {
     return (
       <div id="sidebar">
         <p>List of Pokémon</p>
-        <ol>
-          {pokemonList}
-        </ol>
+        {pokemonList}
       </div>
     );
   }

@@ -1,31 +1,40 @@
 #sidebar {
   display: flex;
   flex-direction: column;
-  max-height: 96vh;
+  height: 100vh;
   max-width: 25vw;
-  padding: 2vh 2vw;
   overflow-y: scroll;
   background-color: lightgray;
 }
 
-.sidebar-name {
-  padding: 1%;
+#sidebar > p {
+  font-size: 1.35em;
+  margin: 1.5vh auto;
 }
 
-.sidebar-name > a {
+.sidebar-item {
+  display: flex;
+  flex-direction: row;
+  margin: 0 2vw;
+}
+
+.sidebar-id {
+  margin-right: 0.5em;
+}
+
+.sidebar-link {
   text-transform: capitalize;
+  text-decoration: none;
+  font-size: 1.15em;
   border: none;
   background-color: unset;
   color: rgb(97, 96, 96);
-  width: 100%;
   text-align: left;
+  padding: 0.3em 0;
 }
 
-.sidebar-name:hover > a {
+.sidebar-link:hover {
   color: red;
-}
-
-.sidebar-name:hover {
   background-color: wheat;
 }
 
