@@ -10,7 +10,7 @@ import './Pokedex.css';
 function Sprite(props) {
   const { sprite, name } = props;
 
-  const loadingGifSrc = `${process.env.PUBLIC_URL}/img/loading.gif`;
+  const loadingGifSrc = `${process.env.PUBLIC_URL}/img/loading.svg`;
 
   // Class names for loadingGif and sprite imgs.
   const spriteHidden = 'sprite-hidden';
