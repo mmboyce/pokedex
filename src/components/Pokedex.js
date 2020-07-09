@@ -191,6 +191,7 @@ class Pokedex extends React.Component {
   }
 
   render() {
+    // FIXME Does not stop display loading gif, and prints undefined into text displays!
     // if redirect is not false, then we need to redirect to where the
     // key press has indicated.
     // This is workaround for useHistory not being available to component classes.
