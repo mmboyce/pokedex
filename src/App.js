@@ -20,6 +20,10 @@ import 'normalize.css';
 
 const pokeApiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
+const appKeys = {
+  redirect: 'appKeyRedirect',
+};
+
 function getIdFromUrl(url) {
   const urlPieces = url.split('/');
   // the second to last piece of the url contains the ID of the pokemon
@@ -63,6 +67,8 @@ function MainContainer(props) {
     // Useful for invalid params instead of a 404
     pokedex = <Redirect to="/1" />;
   }
+
+  localStorage.setItem(appKeys.redirect, `/${id}`);
 
   return (
     <div id="main-container">
@@ -153,6 +159,9 @@ class App extends React.Component {
   render() {
     const { results, loaded } = this.state;
 
+    const storedID = localStorage.getItem(appKeys.redirect);
+    const indexRedirectTo = storedID === null ? '/1' : storedID;
+
     // LoadedBody is used so that we do not try to pass props from an asynchronous call
     // before the state is ready for it
     const loadedBody = (
@@ -163,7 +172,7 @@ class App extends React.Component {
             <MainContainer results={results} />
           </Route>
           <Route path="/">
-            <Redirect to="/1" />
+            <Redirect to={indexRedirectTo} />
           </Route>
         </Switch>
       </Router>
