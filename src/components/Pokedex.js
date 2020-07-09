@@ -7,35 +7,44 @@ import {
 
 import './Pokedex.css';
 
+const loadingSvgSrc = `${process.env.PUBLIC_URL}/img/loading.svg`;
+
+// Class names for loadingGif and sprite imgs.
+const spriteVisible = 'sprite-visible';
+const spriteHidden = 'sprite-hidden';
+
+const loadingText = 'loading...';
+
 function Sprite(props) {
   const { sprite, name } = props;
 
-  const loadingGifSrc = `${process.env.PUBLIC_URL}/img/loading.svg`;
-
-  // Class names for loadingGif and sprite imgs.
-  const spriteHidden = 'sprite-hidden';
-  const spriteVisible = 'sprite-visible';
-
   const [loadingGifVisibility, setLoadingGifVisiblity] = useState(spriteVisible);
   const [spriteVisibility, setSpriteVisibility] = useState(spriteHidden);
+  const spritePresent = sprite !== loadingText;
 
   const handleImageLoad = () => {
     setLoadingGifVisiblity(spriteHidden);
     setSpriteVisibility(spriteVisible);
   };
 
+  const spriteElement = spritePresent ? (
+    <img
+      src={sprite}
+      alt={name}
+      onLoad={handleImageLoad}
+      className={spriteVisibility}
+      id="sprite-image"
+    />
+  ) : (<></>);
+
   return (
     <>
+      {spriteElement}
       <img
-        src={sprite}
-        alt={name}
-        onLoad={handleImageLoad}
-        className={spriteVisibility}
-      />
-      <img
-        src={loadingGifSrc}
+        src={loadingSvgSrc}
         alt="Buffering"
         className={loadingGifVisibility}
+        id="loading-image"
       />
     </>
   );
@@ -60,19 +69,20 @@ class Pokedex extends React.Component {
     super(props);
     this.state = {
       redirect: false,
+      navClicked: true,
     };
 
     this.fetchInfo = this.fetchInfo.bind(this);
-    this.handleLoadInfo = this.handleLoadInfo.bind(this);
     this.handleLoadChange = this.handleLoadChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleNavClick = this.handleNavClick.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
 
     // TODO TEST: Handle errors differently
-    this.fetchInfo().then(this.handleLoadInfo)
+    this.fetchInfo()
       .catch((error) => alert(error));
   }
 
@@ -96,7 +106,7 @@ class Pokedex extends React.Component {
 
   componentDidUpdate() {
   // TODO TEST: Handle errors differently
-    this.fetchInfo().then(this.handleLoadInfo)
+    this.fetchInfo()
       .catch((error) => alert(error));
   }
 
@@ -127,75 +137,17 @@ class Pokedex extends React.Component {
       weight = Math.round(weight * 100) / 100;
 
       this.setState({
-        id,
         name,
         weight,
         height,
         sprite,
         types,
+        navClicked: false,
         redirect: false,
       });
     } else {
       throw new Error(response.status);
     }
-  }
-
-  handleLoadInfo() {
-    const {
-      id, name, weight, height, sprite, types,
-    } = this.state;
-
-    [name, weight, height, sprite].map((property) => {
-      if (property === undefined) {
-        return 'loading';
-      }
-      return property;
-    });
-
-    const prev = this.handleLoadChange(-1);
-    const next = this.handleLoadChange(+1);
-
-    return (
-      <div id="pokedex-content">
-        <div id="display">
-          <p id="id-text">
-            #
-            {id}
-          </p>
-          <Sprite name={name} sprite={sprite} />
-          {types !== undefined ? <Type types={types} /> : ''}
-        </div>
-        <div id="buttons">
-          <Link to={`/${prev}`}>Prev</Link>
-          <Link to={`/${next}`}>Next</Link>
-        </div>
-        <div id="stat-container">
-          <div id="stats">
-            {/* TODO DISPLAY: While awaiting new stats, have these say LOADING */}
-            <div className="stat-line">
-              <div className="stat-left">Name:</div>
-              <div className="stat-right">
-                {name}
-              </div>
-            </div>
-            <div className="stat-line">
-              <div className="stat-left">Height:</div>
-              <div className="stat-right">
-                {height}
-                m
-              </div>
-            </div>
-            <div className="stat-line">
-              <div className="stat-left">Weight:</div>
-              <div className="stat-right">
-                {weight}
-                kg
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   }
 
   handleLoadChange(change) {
@@ -232,17 +184,80 @@ class Pokedex extends React.Component {
     });
   }
 
+  handleNavClick() {
+    this.setState({
+      navClicked: true,
+    });
+  }
+
   render() {
     // if redirect is not false, then we need to redirect to where the
     // key press has indicated.
-    // This is workaround for useHistory not being available to event listeners.
+    // This is workaround for useHistory not being available to component classes.
     const { redirect } = this.state;
 
     const redirectTo = <Redirect to={redirect} />;
 
+    const { id } = this.props;
+
+    const {
+      name, weight, height, sprite, types, navClicked,
+    } = this.state;
+
+    const contextualContent = [name, weight, height, sprite];
+
+    const displayInfo = contextualContent.map((property) => {
+      if (property === undefined || navClicked) {
+        return loadingText;
+      }
+      return property;
+    });
+
+    const prev = this.handleLoadChange(-1);
+    const next = this.handleLoadChange(+1);
+
+    const pokedexContent = (
+      <div id="pokedex-content">
+        <div id="display">
+          <p id="id-text">
+            #
+            {id}
+          </p>
+          <Sprite name={displayInfo.name} sprite={displayInfo.sprite} />
+          {types !== undefined ? <Type types={types} /> : ''}
+        </div>
+        <div id="buttons">
+          <Link to={`/${prev}`} onClick={this.handleNavClick}>Prev</Link>
+          <Link to={`/${next}`} onClick={this.handleNavClick}>Next</Link>
+        </div>
+        <div id="stat-container">
+          <div id="stats">
+            <div className="stat-line">
+              <div className="stat-left">Name:</div>
+              <div className="stat-right">
+                {displayInfo.name}
+              </div>
+            </div>
+            <div className="stat-line">
+              <div className="stat-left">Height:</div>
+              <div className="stat-right">
+                {displayInfo.height === loadingText ? loadingText : `${displayInfo.height}m`}
+              </div>
+            </div>
+            <div className="stat-line">
+              <div className="stat-left">Weight:</div>
+              <div className="stat-right">
+                {displayInfo.weight === loadingText ? loadingText : `${displayInfo.weight}kg`}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
     return (
       <div id="pokedex">
-        {redirect ? redirectTo : this.handleLoadInfo()}
+        {redirect ? redirectTo : pokedexContent}
       </div>
     );
   }
