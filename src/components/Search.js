@@ -6,6 +6,11 @@ import PropTypes from 'prop-types';
 
 import './Search.css';
 
+// Object containing values for getItem from localStorage
+const listKeys = {
+  value: 'listKeyValue',
+};
+
 function handleMatchPokemon(pokemon, inputValue) {
   return pokemon.name.indexOf(inputValue.toLowerCase()) !== -1;
 }
@@ -22,9 +27,12 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
 
+    const cachedValue = localStorage.getItem(listKeys.value);
+    const value = cachedValue === null ? '' : cachedValue;
+
     this.state = {
       redirect: false,
-      value: '',
+      value,
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -32,10 +40,14 @@ class Search extends React.Component {
   }
 
   handleChange(e) {
+    const { value } = e.target;
+
     this.setState({
-      value: e.target.value,
+      value,
       redirect: false,
     });
+
+    localStorage.setItem(listKeys.value, value);
   }
 
   handleSearch() {
