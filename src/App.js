@@ -15,7 +15,6 @@ import Pokedex from './components/Pokedex';
 import './App.css';
 import 'normalize.css';
 
-// TODO LOCALSTORAGE: Include id in local storage
 // TODO TEST: Test all functions
 
 const pokeApiUrl = 'https://pokeapi.co/api/v2/pokemon';
