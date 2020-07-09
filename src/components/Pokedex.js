@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Link,
@@ -6,6 +6,40 @@ import {
 } from 'react-router-dom';
 
 import './Pokedex.css';
+
+function Sprite(props) {
+  const { sprite, name } = props;
+
+  const loadingGifSrc = `${process.env.PUBLIC_URL}/img/loading.gif`;
+
+  // Class names for loadingGif and sprite imgs.
+  const spriteHidden = 'sprite-hidden';
+  const spriteVisible = 'sprite-visible';
+
+  const [loadingGifVisibility, setLoadingGifVisiblity] = useState(spriteVisible);
+  const [spriteVisibility, setSpriteVisibility] = useState(spriteHidden);
+
+  const handleImageLoad = () => {
+    setLoadingGifVisiblity(spriteHidden);
+    setSpriteVisibility(spriteVisible);
+  };
+
+  return (
+    <>
+      <img
+        src={sprite}
+        alt={name}
+        onLoad={handleImageLoad}
+        className={spriteVisibility}
+      />
+      <img
+        src={loadingGifSrc}
+        alt="Buffering"
+        className={loadingGifVisibility}
+      />
+    </>
+  );
+}
 
 function Type(props) {
   const { types } = props;
@@ -128,8 +162,7 @@ class Pokedex extends React.Component {
             #
             {id}
           </p>
-          <img src={sprite} alt={name} />
-          {/* TODO DISPLAY: Have a Loading img for when sprites are changing */}
+          <Sprite name={name} sprite={sprite} />
           {types !== undefined ? <Type types={types} /> : ''}
         </div>
         <div id="buttons">
@@ -214,6 +247,12 @@ class Pokedex extends React.Component {
     );
   }
 }
+
+Sprite.propTypes = {
+  sprite: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+};
+
 Type.propTypes = {
   types: PropTypes.arrayOf(
     PropTypes.shape({
