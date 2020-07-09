@@ -43,7 +43,7 @@ function Sprite(props) {
       <img
         src={loadingSvgSrc}
         alt="Buffering"
-        className={loadingGifVisibility}
+        className={spritePresent ? loadingGifVisibility : spriteVisible}
         id="loading-image"
       />
     </>
@@ -191,7 +191,6 @@ class Pokedex extends React.Component {
   }
 
   render() {
-    // FIXME Does not stop display loading gif, and prints undefined into text displays!
     // if redirect is not false, then we need to redirect to where the
     // key press has indicated.
     // This is workaround for useHistory not being available to component classes.
@@ -205,14 +204,13 @@ class Pokedex extends React.Component {
       name, weight, height, sprite, types, navClicked,
     } = this.state;
 
-    const contextualContent = [name, weight, height, sprite];
-
-    const displayInfo = contextualContent.map((property) => {
-      if (property === undefined || navClicked) {
-        return loadingText;
-      }
-      return property;
-    });
+    // As verbose as these four lines are, using a destructured array after map arrow
+    // function didn't work for these exact same constants. Not sure why, but this
+    // works whereas the way it is written in the previous commit doesn't.
+    const displayName = (name === undefined || navClicked) ? loadingText : name;
+    const displaySprite = (sprite === undefined || navClicked) ? loadingText : sprite;
+    const displayWeight = (weight === undefined || navClicked) ? loadingText : weight;
+    const displayHeight = (height === undefined || navClicked) ? loadingText : height;
 
     const prev = this.handleLoadChange(-1);
     const next = this.handleLoadChange(+1);
@@ -224,7 +222,7 @@ class Pokedex extends React.Component {
             #
             {id}
           </p>
-          <Sprite name={displayInfo.name} sprite={displayInfo.sprite} />
+          <Sprite name={displayName} sprite={displaySprite} />
           {types !== undefined ? <Type types={types} /> : ''}
         </div>
         <div id="buttons">
@@ -236,19 +234,19 @@ class Pokedex extends React.Component {
             <div className="stat-line">
               <div className="stat-left">Name:</div>
               <div className="stat-right">
-                {displayInfo.name}
+                {displayName}
               </div>
             </div>
             <div className="stat-line">
               <div className="stat-left">Height:</div>
               <div className="stat-right">
-                {displayInfo.height === loadingText ? loadingText : `${displayInfo.height}m`}
+                {displayHeight === loadingText ? loadingText : `${displayHeight}m`}
               </div>
             </div>
             <div className="stat-line">
               <div className="stat-left">Weight:</div>
               <div className="stat-right">
-                {displayInfo.weight === loadingText ? loadingText : `${displayInfo.weight}kg`}
+                {displayWeight === loadingText ? loadingText : `${displayWeight}kg`}
               </div>
             </div>
           </div>

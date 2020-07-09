@@ -45,8 +45,17 @@
   height: 150px;
 
   /* nearest-neighbor upscaling, which is good for pixel art */
-  image-rendering: crisp-edges;
+  image-rendering: crisp-edges; /* Firefox */
+  image-rendering: pixelated; /* Chrome */
   margin-bottom: 0;
+}
+
+#loading-image {
+  width: 64px;
+  height: 64px;
+
+  /* to center the loading-gif: 150 - 64 = 86 */
+  margin-bottom: 86px;
 }
 
 .sprite-hidden {
