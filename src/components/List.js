@@ -6,68 +6,44 @@ import {
 
 import './List.css';
 
-class List extends React.Component {
-  constructor(props) {
-    super(props);
+function List(props) {
+  const { results } = props;
 
-    this.state = {
+  const pokemonList = results.map((pokemon) => {
+    const { name } = pokemon;
+    const { id } = pokemon;
 
-    };
+    // This is the ID displayed in the list.
+    let textID = id;
 
-    this.loadPokemonList = this.loadPokemonList.bind(this);
-  }
-
-  componentDidMount() {
-    this.loadPokemonList();
-  }
-
-  loadPokemonList() {
-    const { results } = this.props;
-
-    const pokemonList = results.map((pokemon) => {
-      const { name } = pokemon;
-      const { id } = pokemon;
-
-      // This is the ID displayed in the list.
-      let textID = id;
-
-      // Check its length and add appropriate 0's until the
-      // resulting ID is 3 digits for formatting purposes
-      if (textID.length < 2) {
-        textID = `00${textID}`;
-      } else if (textID.length < 3) {
-        textID = `0${textID}`;
-      }
-
-      return (
-        <Link to={`/${id}`} className="sidebar-link">
-          <div className="sidebar-item">
-            <div className="sidebar-id">
-              #
-              {textID}
-              :
-            </div>
-            {name}
-          </div>
-        </Link>
-      );
-    });
-
-    this.setState({
-      pokemonList,
-    });
-  }
-
-  render() {
-    const { pokemonList } = this.state;
+    // Check its length and add appropriate 0's until the
+    // resulting ID is 3 digits for formatting purposes
+    if (textID.length < 2) {
+      textID = `00${textID}`;
+    } else if (textID.length < 3) {
+      textID = `0${textID}`;
+    }
 
     return (
-      <div id="sidebar">
-        <p>Pokédex Entries</p>
-        {pokemonList}
-      </div>
+      <Link to={`/${id}`} className="sidebar-link">
+        <div className="sidebar-item">
+          <div className="sidebar-id">
+            #
+            {textID}
+            :
+          </div>
+          {name}
+        </div>
+      </Link>
     );
-  }
+  });
+
+  return (
+    <div id="sidebar">
+      <p>Pokédex Entries</p>
+      {pokemonList}
+    </div>
+  );
 }
 
 List.propTypes = {
