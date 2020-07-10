@@ -64,6 +64,10 @@
   display: none;
 }
 
+.sprite-visible {
+  display: block;
+}
+
 #stat-container {
   display: flex;
   background-color: #cbcbcb;
