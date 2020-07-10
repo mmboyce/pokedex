@@ -111,6 +111,8 @@
   color: white;
   background-color: #f81515;
   padding: 5.5%;
+  min-width: 2em; /*Fix inconsistent size on chrome*/
+  align-self: center;
   border-radius: 10px;
   margin: auto;
   margin-bottom: 10%;
