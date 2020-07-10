@@ -6,12 +6,13 @@
   height: 100vh;
   max-width: 25vw;
   overflow-y: scroll;
-  background-color: lightgray;
+  background-color: #f81515;
 }
 
 #sidebar > p {
   font-size: 1.35em;
   margin: 1.5vh auto;
+  color: white;
 }
 
 .sidebar-item {
@@ -30,14 +31,14 @@
   font-size: 1.15em;
   border: none;
   background-color: unset;
-  color: rgb(97, 96, 96);
+  color: white;
   text-align: left;
   padding: 0.3em 0;
 }
 
 .sidebar-link:hover {
   color: red;
-  background-color: wheat;
+  background-color: white;
 }
 
 .item-highlighted,
