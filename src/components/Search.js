@@ -55,7 +55,7 @@ function capitalizeString(toCapitalize) {
  * @example
  * const results = [{}]
  *
- * <Search results={results} />
+ * <Search results={results} onFocus={onFocus} onBlur={onBlur} />
  */
 class Search extends React.Component {
   constructor(props) {
@@ -79,18 +79,25 @@ class Search extends React.Component {
 
   /**
    * This function sets state.value to match what is in the textbox of the component.
+   * After that, it triggers the onFocus() function to blur the other components sharing
+   * its parent.
    * @param {Event} e The onChange event that triggered this method.
    * @memberof Search
    * @example
    * <Autocomplete onChange={this.handleChange} />
    */
   handleChange(e) {
+    const { onFocus } = this.props;
     const { value } = e.target;
 
     this.setState({
       value,
       redirect: false,
     });
+
+    // OnFocus is called here for a situation where the user never loses focus of the input
+    // after submitting a pokemon, and starts typing again.
+    onFocus();
 
     localStorage.setItem(listKeys.value, value);
   }
@@ -128,7 +135,12 @@ class Search extends React.Component {
 
   render() {
     const { redirect, value } = this.state;
-    const { results } = this.props;
+    /**
+     * onFocus and onBlur events are the opposite of each other!
+     * onBlur occurs when an object loses focus, and counterintuitively, we want to
+     * get rid of the blur effect when this happens!
+     */
+    const { results, onFocus, onBlur } = this.props;
 
     /** If state.redirect is false, no redirect occurs, but if it is an ID we redirect to that ID */
     const redirectTo = redirect === false ? (<></>) : (<Redirect to={`/${redirect}`} />);
@@ -140,6 +152,8 @@ class Search extends React.Component {
           inputProps={{
             id: 'search-box',
             placeholder: 'Search Pokémon...',
+            onFocus,
+            onBlur,
           }}
           wrapperStyle={{ position: 'relative' }}
           items={results}
@@ -149,8 +163,14 @@ class Search extends React.Component {
           /** Once the a value is submitted or a dropdown has been selected, the text in the
            * textbox is formatted to be capitalized, and handleSearch is called as a callback
            * of setState to hanlde the redirect to the submitted pokemon.
+           *
+           * ADDITIONALLY, onBlur is called after a submission to remove the blur effect.
+           * Counter intutitive event naming, thanks html5.
            */
-          onSelect={(input) => this.setState({ value: capitalizeString(input) }, this.handleSearch)}
+          onSelect={(input) => this.setState({ value: capitalizeString(input) }, () => {
+            this.handleSearch();
+            onBlur();
+          })}
           renderMenu={(children) => (
             <div className="menu">
               {children}
@@ -181,6 +201,8 @@ Search.propTypes = {
       id: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  onFocus: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
 };
 
 export default Search;

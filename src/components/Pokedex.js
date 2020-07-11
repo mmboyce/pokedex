@@ -155,7 +155,7 @@ class Pokedex extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { id } = this.props;
+    const { id, className } = this.props;
     const { sprite, redirect } = this.state;
 
     // These checks are to prevent against constant pulling of JSON and slowing down
@@ -165,11 +165,13 @@ class Pokedex extends React.Component {
       && nextState.sprite !== undefined;
     const nextSpriteIsDifferentFromCurrentSprite = sprite !== nextState.sprite;
     const redirectIsNecessary = redirect === false && nextState.redirect !== false;
+    const didClassNameChange = className !== nextProps.className;
 
     return currentIdDoesNotMatchNextId
       || currentSpriteIsUndefinedAndNextSpriteIsNot
       || nextSpriteIsDifferentFromCurrentSprite
-      || redirectIsNecessary;
+      || redirectIsNecessary
+      || didClassNameChange;
   }
 
   /**
@@ -309,7 +311,7 @@ class Pokedex extends React.Component {
 
     const redirectTo = <Redirect to={redirect} />;
 
-    const { id } = this.props;
+    const { id, className } = this.props;
 
     const {
       name, weight, height, sprite, types, navClicked,
@@ -366,7 +368,7 @@ class Pokedex extends React.Component {
     );
 
     return (
-      <div id="pokedex">
+      <div id="pokedex" className={className}>
         {redirect ? redirectTo : pokedexContent}
       </div>
     );
@@ -394,6 +396,7 @@ Pokedex.propTypes = {
   id: PropTypes.string.isRequired,
   pokeApiUrl: PropTypes.string.isRequired,
   resultsLength: PropTypes.number.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
 export default Pokedex;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   BrowserRouter as Router,
@@ -83,11 +83,16 @@ function MainContainer(props) {
   const { results } = props;
   const limit = results.length;
 
+  // className will be used to repressent siblings of the Search component blurring when
+  // the Search component receives focus.
+  const [className, setClassName] = useState('');
+
   let pokedex = (
     <Pokedex
       resultsLength={limit}
       id={id}
       pokeApiUrl={pokeApiUrl}
+      className={className}
     />
   );
 
@@ -102,11 +107,31 @@ function MainContainer(props) {
     pokedex = <Redirect to="/1" />;
   }
 
+  /**
+   * This function applies the search-box-focus class to the Pokedex component, which
+   * blurs it when the Search Box is focused.
+   * @example
+   * <Search onFocus={handleSearchBoxFocus} />
+   */
+  const handleSearchBoxFocus = () => {
+    setClassName('search-box-focused');
+  };
+
+  /**
+   * This function removes the search-box-focus class from the Pokedex component, which
+   * gets rid of the blur effect on it from when the Search Box was focused.
+   * @example
+   * <Search onBlur={handleSearchBoxLoseFocus} />
+   */
+  const handleSearchBoxLoseFocus = () => {
+    setClassName('');
+  };
+
   localStorage.setItem(appKeys.redirect, `/${id}`);
 
   return (
     <div id="main-container">
-      <Search results={results} />
+      <Search results={results} onFocus={handleSearchBoxFocus} onBlur={handleSearchBoxLoseFocus} />
       {pokedex}
     </div>
   );
