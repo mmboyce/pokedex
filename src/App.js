@@ -130,7 +130,7 @@ class App extends React.Component {
     this.formatResults = this.formatResults.bind(this);
 
     this.state = {
-      // Results will contain
+      // Results will contain the list of all pokemon names and their ID's
       results: {},
       isLoaded: false,
     };
