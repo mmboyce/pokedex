@@ -6,6 +6,20 @@ import {
 
 import './List.css';
 
+/**
+ * The List Component displays a list of all Pokemon supplied by its results prop.
+ * @component
+ * @param {Object} props
+ * @param {Object[]} props.results
+ * @param {string} props.results[].name
+ * @param {string} props.results[].id
+ * @param {string} props.results[].url
+ * @returns {JSX.Element}
+ * @example
+ * const results = [{}]
+ *
+ * <List results={results} />
+ */
 function List(props) {
   const { results } = props;
 
