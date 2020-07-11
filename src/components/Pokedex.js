@@ -9,22 +9,49 @@ import './Pokedex.css';
 
 const loadingSvgSrc = `${process.env.PUBLIC_URL}/img/loading.svg`;
 
-// Class names for loadingGif and sprite imgs.
-const spriteVisible = 'sprite-visible';
-const spriteHidden = 'sprite-hidden';
+/**
+ * Enum representing class names for loadingGif and sprite imgs.
+ * @enum {string}
+ */
+const spriteStates = {
+  spriteVisible: 'sprite-visible',
+  spriteHidden: 'sprite-hidden',
+};
 
 const loadingText = 'loading...';
 
+/**
+ * The Sprite Component handles displaying a Sprite via its url provided in the sprite prop. The
+ * name prop is used as its alt text.
+ *
+ * Prior to the sprite loading, a loading gif is displayed.
+ * @component
+ * @param {Object} props
+ * @param {string} props.sprite
+ * @param {string} props.name
+ * @returns {JSX.Element}
+ * @example
+ * const sprite = "link_to_sprite.png"
+ * const name = "name of pokemon"
+ *
+ * <Sprite name={name} sprite={sprite} />
+ */
 function Sprite(props) {
   const { sprite, name } = props;
 
-  const [loadingGifVisibility, setLoadingGifVisiblity] = useState(spriteVisible);
-  const [spriteVisibility, setSpriteVisibility] = useState(spriteHidden);
+  const [loadingGifVisibility, setLoadingGifVisiblity] = useState(spriteStates.spriteVisible);
+  const [spriteVisibility, setSpriteVisibility] = useState(spriteStates.spriteHidden);
   const spritePresent = sprite !== loadingText;
 
+  /**
+   * Once the sprite image has loaded this alternates the loading gif from being rendered and
+   * renders the sprite in its place.
+   * @example
+   * <img onLoad={handleImageLoad} />
+   */
   const handleImageLoad = () => {
-    setLoadingGifVisiblity(spriteHidden);
-    setSpriteVisibility(spriteVisible);
+    setLoadingGifVisiblity(spriteStates.spriteHidden);
+    setSpriteVisibility(spriteStates.spriteVisible);
   };
 
   const spriteElement = spritePresent ? (
@@ -43,13 +70,38 @@ function Sprite(props) {
       <img
         src={loadingSvgSrc}
         alt="Buffering"
-        className={spritePresent ? loadingGifVisibility : spriteVisible}
+        className={spritePresent ? loadingGifVisibility : spriteStates.spriteVisible}
         id="loading-image"
       />
     </>
   );
 }
 
+/**
+ * The Type Component displays the corresponding types provided to its types prop. It accounts for
+ * rendering as many types as a pokemon has.
+ * @component
+ * @param {Object} props
+ * @param {Object[]} props.types
+ * @param {Object} props.types[].type
+ * @param {string} props.types[].type.name
+ * @returns {JSX.Element}
+ * @example
+ * const types = [
+ *  {
+ *    type: {
+ *      name: 'grass',
+ *    }
+ *  },
+ *  {
+ *    type: {
+ *      name: 'normal',
+ *    }
+ *  }
+ * ];
+ *
+ * <Type types={types} />
+ */
 function Type(props) {
   const { types } = props;
 
@@ -64,6 +116,18 @@ function Type(props) {
   );
 }
 
+/**
+ * The Pokedex Component contains a Pokemon's sprite, types, stats, and navigation features.
+ * @class Pokedex
+ * @component
+ * @extends {React.Component}
+ * @example
+ * const id = '1';
+ * const pokeApiUrl = 'apiurl.com';
+ * const resultsLength = 1000
+ *
+ * <Pokedex id={id} pokeApiUrl={pokeApiUrl} resultsLength={resultsLength} />
+ */
 class Pokedex extends React.Component {
   constructor(props) {
     super(props);
@@ -78,6 +142,10 @@ class Pokedex extends React.Component {
     this.handleNavClick = this.handleNavClick.bind(this);
   }
 
+  /**
+   * This method adds the listener for handleKeyDown, and handles async fechInfo once the
+   * Pokedex component has mounted in the DOM.
+   */
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
 
@@ -104,12 +172,26 @@ class Pokedex extends React.Component {
       || redirectIsNecessary;
   }
 
+  /**
+   * Each time we receive different props, we must fetch the info again.
+   */
   componentDidUpdate() {
   // TODO TEST: Handle errors differently
     this.fetchInfo()
       .catch((error) => alert(error));
   }
 
+  /**
+   * This async method requests the data for the pokemon with the ID in the component's props.
+   * Once it retrieves the data, it puts the relavant information into the component's state.
+   * @async
+   * @memberof Pokedex
+   * @example
+   * componentDidMount(){
+   *  this.fetchInfo();
+   * }
+   * @throws Error representing resulting status of the async request.
+   */
   async fetchInfo() {
     const { id, pokeApiUrl } = this.props;
 
@@ -150,6 +232,17 @@ class Pokedex extends React.Component {
     }
   }
 
+  /**
+   * This method adds the provided amount to the current ID. It checks the bounds of the ID
+   * to wrap around to the first element if traversing past the last element, and vice versa.
+   * @param {number} change The amount to add to the current ID
+   * @memberof Pokedex
+   * @returns {number} The new ID after adding the change.
+   * @example
+   * // ID === 3
+   * const two = handleLoadChange(-1)
+   * // two === 2
+   */
   handleLoadChange(change) {
     const { id, resultsLength } = this.props;
     let newId = +id + change;
@@ -163,6 +256,14 @@ class Pokedex extends React.Component {
     return newId;
   }
 
+  /**
+   * This method handles navigation through the Pokedex based on user key presses. It updates
+   * the redirect state according to navigation to the previous or next pokemon.
+   * @param {KeyboardEvent} e
+   * @memberof Pokedex
+   * @example
+   * document.addEventListener('keydown', this.handleKeyDown);
+   */
   handleKeyDown(e) {
     const { keyCode, altKey } = e;
     const prev = `/${this.handleLoadChange(-1)}`;
@@ -181,9 +282,19 @@ class Pokedex extends React.Component {
 
     this.setState({
       redirect,
-    });
+    }, this.handleNavClick);
   }
 
+  /**
+   * This method sets the navClicked state to true. This is used when any navigation occurs
+   * and forces the pokedex to display stats as "Loading..." and the loading gif in Sprite.
+   *
+   * This is useful for responsive feedback as it is immediately clear that the Pokedex is
+   * retrieving information for the user.
+   * @memberof Pokedex
+   * @example
+   * <Link to="location" onClick={this.handleNavClick}>link</Link>
+   */
   handleNavClick() {
     this.setState({
       navClicked: true,
