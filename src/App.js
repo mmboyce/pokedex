@@ -19,10 +19,20 @@ import 'normalize.css';
 
 const pokeApiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
+/**
+ * This enum contains the names of keys for localStorage
+ * @enum {string}
+ */
 const appKeys = {
+  /** The key for the pokemon ID the user was on when their session ended */
   redirect: 'appKeyRedirect',
 };
 
+/**
+ * A method to extract the ID of a pokemon from the url to its JSON info.
+ * @param {string} url A url containing an ID
+ * @returns {string} The ID as a string.
+ */
 function getIdFromUrl(url) {
   const urlPieces = url.split('/');
   // the second to last piece of the url contains the ID of the pokemon
@@ -31,6 +41,19 @@ function getIdFromUrl(url) {
   return id;
 }
 
+/**
+ * The LoadingScreen Component displays the splash screen for our app.
+ * If it is not supplied a className of "loaded" by its parent, it will stay visible. Otherwise it
+ * ceases to be displayed.
+ * @component
+ * @param {Object} props
+ * @param {string} props.className
+ * @returns {JSX.Element}
+ * @example
+ * let loadedStyle
+ *
+ * <LoadingScreen className={loadedStyle} />
+ */
 function LoadingScreen(props) {
   const { className } = props;
 
@@ -43,7 +66,19 @@ function LoadingScreen(props) {
   );
 }
 
+/**
+ * The MainContainer Component houses the Search and Pokedex components.
+ * @component
+ * @param {Object} props
+ * @param {Object} props.results
+ * @returns {JSX.Element}
+ * @example
+ * let results = [{}]
+ *
+ * <MainContainer results={results} />
+ */
 function MainContainer(props) {
+  // This fetches the id param from the route the user is currently at.
   const { id } = useParams();
   const { results } = props;
   const limit = results.length;
@@ -77,6 +112,16 @@ function MainContainer(props) {
   );
 }
 
+/**
+ * The App Component is the heart of the app. It displays the LoadingScreen
+ * atop the other components, suchas List and MainContainer,
+ * while the asynchronous calls in its children run. Once they are completed, the LoadingScreen is
+ * set to "loaded" and fades away to reveal the interactable MainContainer.
+ * @class App
+ * @extends {React.Component}
+ * @example
+ * <App />
+ */
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -85,22 +130,43 @@ class App extends React.Component {
     this.formatResults = this.formatResults.bind(this);
 
     this.state = {
+      // Results will contain
       results: {},
-      loaded: false,
+      isLoaded: false,
     };
   }
 
+  /**
+   * This method handles async fetchAllPokemon and calls formatResults as a callback once the
+   * App component has mounted in the DOM.
+   * @memberof App
+   */
   componentDidMount() {
     // TODO TEST: Handle errors differently
     this.fetchAllPokemon().then(this.formatResults).catch((error) => { console.log(error); });
   }
 
+  /**
+   * This method checks if the app is done fething and formatting results before fading the
+   * loading screen.
+   * @memberof App
+   * @returns {boolean}
+   */
   shouldComponentUpdate(nextProps, nextState) {
-    const { loaded } = this.state;
+    const { isLoaded } = this.state;
 
-    return (!loaded && nextState.loaded);
+    return (!isLoaded && nextState.isLoaded);
   }
 
+  /**
+   * This method requests the list of all pokemon on the PokeAPI. Once it receives the response, it
+   * updates this component's state to include the results.
+   * @returns {Array} The results array from the request for JSON object representing all
+   * pokemon.
+   * @async
+   * @memberof App
+   * @throws Error representing resulting status of the async request.
+   */
   async fetchAllPokemon() {
     // ?limit=-1 allows us to request all pokemon in the databses
     const response = await fetch(`${pokeApiUrl}?limit=-1`, { mode: 'cors' });
@@ -119,13 +185,26 @@ class App extends React.Component {
     throw new Error(response.status);
   }
 
+  /**
+   * This method should be used as a callback to fetchAllPokemon
+   *
+   * This function removes hyphens from the pokemon names and also adds ID's to each object, and
+   * removes from the array entries that should not be included.
+   *
+   * (e.g.: when the entry id's jump to five digits to represent cosmetic variations of an
+   * evolution)
+   *
+   * It then modifies the state to contain the formatted list, and indicates that the app has
+   * loaded.
+   * @param {Object[]} results
+   * @param {string} results[].name
+   * @param {string} results[].url
+   * @memberof App
+   *
+   * @example
+   * this.fetchAllPokemon().then(this.formatResults)
+   */
   formatResults(results) {
-    // This should be used as a callback to fetchAllPokemon
-
-    // This function will add ID's to each object and remove entries that should not be included
-    // from the array. (e.g.: when the entry id's jump to five digits to represent variations of a
-    // form)
-
     const formattedList = results.filter((pokemon) => {
       // remove alternates from results
       const { url } = pokemon;
@@ -135,6 +214,7 @@ class App extends React.Component {
       // these pokemon should not be included
       return (!(id > 10000));
     }).map((pokemon) => {
+      // Now that the alternates have been filtered out, format names, and get IDs
       const { name } = pokemon;
       const { url } = pokemon;
       const id = getIdFromUrl(url);
@@ -151,12 +231,12 @@ class App extends React.Component {
 
     this.setState({
       results: formattedList,
-      loaded: true,
+      isLoaded: true,
     });
   }
 
   render() {
-    const { results, loaded } = this.state;
+    const { results, isLoaded } = this.state;
 
     const storedID = localStorage.getItem(appKeys.redirect);
     const indexRedirectTo = storedID === null ? '/1' : storedID;
@@ -177,11 +257,11 @@ class App extends React.Component {
       </Router>
     );
 
-    const loadingScreen = loaded
+    const loadingScreen = isLoaded
       ? <LoadingScreen className="loaded" />
       : <LoadingScreen />;
 
-    const appBody = loaded
+    const appBody = isLoaded
       ? loadedBody : <></>;
 
     return (
