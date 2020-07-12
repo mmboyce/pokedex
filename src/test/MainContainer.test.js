@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  render, screen, fireEvent, findByText,
+} from '@testing-library/react';
 import { Route, MemoryRouter } from 'react-router-dom';
 import { MainContainer } from '../App';
 
@@ -21,19 +23,37 @@ const renderWithRouter = (children, routeEntries) => (
   )
 );
 
+/**
+ * @type {Array}
+ */
 let testResults;
 
-beforeEach(() => {
-  testResults = [
-    {
-      name: 'testName',
-      id: '1',
-      url: 'testURL',
-    },
-  ];
-});
+const TEST_RESULTS_ONE = [
+  {
+    name: 'testName',
+    id: '1',
+    url: 'testURL',
+  },
+];
+
+const TEST_RESULTS_TWO = [
+  {
+    name: 'testName',
+    id: '1',
+    url: 'testURL',
+  },
+  {
+    name: 'testName2',
+    id: '2',
+    url: 'testUrl2',
+  },
+];
 
 describe('MainContainer mounts', () => {
+  beforeEach(() => {
+    testResults = TEST_RESULTS_ONE;
+  });
+
   test('Renders MainContainer', () => {
     const { getByTestId } = renderWithRouter(
       [<MainContainer results={testResults} />],
@@ -46,6 +66,10 @@ describe('MainContainer mounts', () => {
 });
 
 describe('MainContainer Events Handled', () => {
+  beforeEach(() => {
+    testResults = TEST_RESULTS_ONE;
+  });
+
   test('Search Box Focus Handled', () => {
     const { getByTestId } = renderWithRouter(
       [<MainContainer results={testResults} />],
@@ -73,5 +97,41 @@ describe('MainContainer Events Handled', () => {
 
     fireEvent.blur(searchBoxElement);
     expect(pokedexElement).not.toHaveClass('search-box-focused');
+  });
+});
+
+describe('Edge Case Redirects', () => {
+  beforeEach(() => {
+    testResults = TEST_RESULTS_TWO;
+  });
+
+  test('Redirects to last ID if param greater than limit', () => {
+    const { getByTestId } = renderWithRouter(
+      [<MainContainer results={testResults} />],
+      ['/3'],
+    );
+
+    const idTextElement = getByTestId('id-text');
+    expect(idTextElement).toHaveTextContent('#2');
+  });
+
+  test('Redirects to first ID if param less than 1', () => {
+    const { getByTestId } = renderWithRouter(
+      [<MainContainer results={testResults} />],
+      ['/0'],
+    );
+
+    const idTextElement = getByTestId('id-text');
+    expect(idTextElement).toHaveTextContent('#1');
+  });
+
+  test('Redirects to first ID if param is not numerical', () => {
+    const { getByTestId } = renderWithRouter(
+      [<MainContainer results={testResults} />],
+      ['/notNumerical'],
+    );
+
+    const idTextElement = getByTestId('id-text');
+    expect(idTextElement).toHaveTextContent('#1');
   });
 });
