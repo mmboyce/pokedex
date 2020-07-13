@@ -1,6 +1,8 @@
 .error-msg {
-  height: 2em;
-  padding: 2em;
+  position: fixed;
+  top: 50vh;
+  left: 50vw;
+  padding: 4em;
   background-color: black;
   color: white;
   border-radius: 10px;
