@@ -324,7 +324,7 @@ class App extends React.Component {
 
     const errorElement = errorMsg === undefined
       ? <></> : (
-        <ErrorDisplay errWhen="trying to fetch list of all Pokémon" message="errorMsg" />
+        <ErrorDisplay errWhen="trying to fetch list of all Pokémon" message={errorMsg} />
       );
 
     const appBody = isLoaded

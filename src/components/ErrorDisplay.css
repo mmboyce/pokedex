@@ -1,9 +1,13 @@
 .error-msg {
   position: fixed;
-  top: 50vh;
-  left: 50vw;
+  width: 500px;
+  height: 75px;
   padding: 4em;
   background-color: black;
   color: white;
   border-radius: 10px;
+  position: fixed;
+  margin: 5% auto;
+  left: 0;
+  right: 0;
 }
