@@ -92,15 +92,15 @@ describe('Format Results', () => {
 
     expect(await screen.findByText('pokemon 1')).toBeInTheDocument();
     expect(await screen.findByText('pokemon 2')).toBeInTheDocument();
-    expect(await screen.findByText('#001:')).toBeInTheDocument();
-    expect(await screen.findByText('#002:')).toBeInTheDocument();
+    expect(await screen.findByText('#1:')).toBeInTheDocument();
+    expect(await screen.findByText('#2:')).toBeInTheDocument();
   });
 
   test('Sequential jump ceases to be included', async () => {
     render(<App />);
 
     const sidebarElement = await screen.findByTestId('sidebar');
-    expect(sidebarElement.lastChild).toHaveTextContent('#002:');
+    expect(sidebarElement.lastChild).toHaveTextContent('#2:');
   });
 });
 
