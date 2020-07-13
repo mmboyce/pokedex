@@ -61,6 +61,7 @@ function Sprite(props) {
       onLoad={handleImageLoad}
       className={spriteVisibility}
       id="sprite-image"
+      data-testid="sprite-image"
     />
   ) : (<></>);
 
@@ -69,9 +70,10 @@ function Sprite(props) {
       {spriteElement}
       <img
         src={loadingSvgSrc}
-        alt="Buffering"
+        alt={`Buffering ${name}`}
         className={spritePresent ? loadingGifVisibility : spriteStates.spriteVisible}
         id="loading-image"
+        data-testid="loading-image"
       />
     </>
   );
@@ -402,4 +404,4 @@ Pokedex.propTypes = {
 };
 
 export default Pokedex;
-export { Type, Sprite };
+export { Type, Sprite, spriteStates, loadingSvgSrc };
