@@ -32,20 +32,26 @@ function List(props) {
 
     // Check its length and add appropriate 0's until the
     // resulting ID is 3 digits for formatting purposes
-    if (textID.length < 2) {
-      textID = `00${textID}`;
-    } else if (textID.length < 3) {
+    const { length: resultsLength } = results;
+    const maxNumberLength = `${resultsLength}`.length;
+
+    const lengthDifference = maxNumberLength - textID.length;
+
+    for (let i = 0; i < lengthDifference; i += 1) {
       textID = `0${textID}`;
     }
 
     return (
       <Link
         to={`/${id}`}
-        key={id}
         className="sidebar-link"
+        key={id}
+
       >
-        <div className="sidebar-item">
-          <div className="sidebar-id">
+        <div
+          className="sidebar-item"
+        >
+          <div className="sidebar-id" data-testid={`sidebar-id-${id}`}>
             #
             {textID}
             :
