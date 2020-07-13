@@ -78,6 +78,6 @@ describe('Sprite handles error', () => {
 
     fireEvent.error(spriteElement);
 
-    expect(await screen.findByTestId('img-error')).toHaveTextContent('Err: Server Timeout');
+    expect(await screen.findByTestId('img-error')).toHaveTextContent('Err: Image Server Timeout');
   });
 });

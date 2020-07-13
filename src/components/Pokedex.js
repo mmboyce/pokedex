@@ -58,7 +58,7 @@ function Sprite(props) {
   };
 
   const handleError = () => {
-    setErrorMsg('Err: Server Timeout');
+    setErrorMsg('Err: Image Server Timeout');
   };
 
   const spriteElement = spritePresent ? (
