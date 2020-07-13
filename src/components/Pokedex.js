@@ -43,6 +43,7 @@ function Sprite(props) {
 
   const [loadingGifVisibility, setLoadingGifVisiblity] = useState(spriteStates.spriteVisible);
   const [spriteVisibility, setSpriteVisibility] = useState(spriteStates.spriteHidden);
+  const [errorMsg, setErrorMsg] = useState(undefined);
   const spritePresent = sprite !== loadingText;
 
   /**
@@ -56,11 +57,16 @@ function Sprite(props) {
     setSpriteVisibility(spriteStates.spriteVisible);
   };
 
+  const handleError = () => {
+    setErrorMsg('Err: Server Timeout');
+  };
+
   const spriteElement = spritePresent ? (
     <img
       src={sprite}
       alt={name}
       onLoad={handleImageLoad}
+      onError={handleError}
       className={spriteVisibility}
       id="sprite-image"
       data-testid="sprite-image"
@@ -77,6 +83,17 @@ function Sprite(props) {
         id="loading-image"
         data-testid="loading-image"
       />
+      {errorMsg ? (
+        <div
+          id="img-error"
+          data-testid="img-error"
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {errorMsg}
+        </div>
+      ) : <></>}
     </>
   );
 }

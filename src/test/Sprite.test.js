@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  render, screen, fireEvent, findByTestId,
+} from '@testing-library/react';
 import { Sprite, spriteStates, loadingSvgSrc } from '../components/Pokedex';
 
 const testSpriteSrc = `${process.env.PUBLIC_URL}/logo192.png`;
@@ -54,5 +56,28 @@ describe('Sprite handles image load', () => {
 
     expect(spriteElement).not.toHaveClass(spriteStates.spriteHidden);
     expect(spriteElement).toHaveClass(spriteStates.spriteVisible);
+  });
+});
+
+describe('Sprite handles error', () => {
+  test('Image can\'t load', async () => {
+    render(<Sprite sprite={testSpriteSrc} name="test" />);
+
+    /**
+     * @type {HTMLImageElement}
+     */
+    const loadingSprite = await screen.findByTestId('loading-image');
+    expect(loadingSprite).toHaveClass(spriteStates.spriteVisible);
+    expect(loadingSprite).not.toHaveClass(spriteStates.spriteHidden);
+    /**
+     * @type {HTMLImageElement}
+     */
+    const spriteElement = await screen.findByTestId('sprite-image');
+    expect(spriteElement).toHaveClass(spriteStates.spriteHidden);
+    expect(spriteElement).not.toHaveClass(spriteStates.spriteVisible);
+
+    fireEvent.error(spriteElement);
+
+    expect(await screen.findByTestId('img-error')).toHaveTextContent('Err: Server Timeout');
   });
 });
