@@ -55,6 +55,7 @@ function Sprite(props) {
   const handleImageLoad = () => {
     setLoadingGifVisiblity(spriteStates.spriteHidden);
     setSpriteVisibility(spriteStates.spriteVisible);
+    setErrorMsg(undefined);
   };
 
   const handleError = () => {
