@@ -115,9 +115,8 @@ class Search extends React.Component {
   handleSearch() {
     const { results } = this.props;
     const { value } = this.state;
-    let findId = false;
-
     const match = results.find((pokemon) => pokemon.name === value.toLowerCase());
+    let findId = false;
 
     if (match !== undefined) {
       findId = match.id;
@@ -173,7 +172,7 @@ class Search extends React.Component {
             onBlur();
           })}
           renderMenu={(children) => (
-            <div className="menu">
+            <div className="menu" data-testid="menu">
               {children}
             </div>
           )}
@@ -181,6 +180,7 @@ class Search extends React.Component {
             <div
               className={`item ${isHighlighted ? 'item-highlighted' : 'not-highlighted'}`}
               key={pokemon.name}
+              data-testid={`item-${pokemon.id}`}
             >
               {pokemon.name}
             </div>
@@ -207,3 +207,4 @@ Search.propTypes = {
 };
 
 export default Search;
+export { listKeys, handleMatchPokemon, capitalizeString };
