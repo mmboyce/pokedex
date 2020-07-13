@@ -62,3 +62,70 @@
   color: black;
   background-color: white;
 }
+
+/* (1366x768) WXGA Display */
+@media screen and (max-width: 1366px) {
+  #search-container {
+    margin-top: 3vh;
+    margin-bottom: 4vh;
+  }
+}
+
+/*Phone portrait*/
+@media only screen and (max-width: 600px) {
+  #search-container {
+    margin-top: 6vh;
+    margin-bottom: 4vh;
+    width: 95%;
+  }
+
+  .item {
+    padding: 2%;
+  }
+
+  .item:nth-of-type(n + 10) {
+    /* limit to 9 results */
+    display: none;
+  }
+
+  #search-box {
+    box-sizing: border-box;
+    width: 100%;
+  }
+}
+
+/* Portrait Tablet*/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  #search-container {
+    margin-top: 8vh;
+    margin-bottom: 10vh;
+    width: 70%;
+  }
+
+  #search-box {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .item {
+    padding: 2%;
+  }
+}
+
+/* Landscape Tablet*/
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  #search-container {
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    width: 60%;
+  }
+
+  #search-box {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .item {
+    padding: 1.5%;
+  }
+}
