@@ -154,6 +154,7 @@ class Search extends React.Component {
             placeholder: 'Search Pokémon...',
             onFocus,
             onBlur,
+            'data-testid': 'search-box',
           }}
           wrapperStyle={{ position: 'relative' }}
           items={results}

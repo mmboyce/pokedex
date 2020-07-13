@@ -39,7 +39,11 @@ function List(props) {
     }
 
     return (
-      <Link to={`/${id}`} className="sidebar-link">
+      <Link
+        to={`/${id}`}
+        key={id}
+        className="sidebar-link"
+      >
         <div className="sidebar-item">
           <div className="sidebar-id">
             #
@@ -53,7 +57,7 @@ function List(props) {
   });
 
   return (
-    <div id="sidebar">
+    <div id="sidebar" data-testid="sidebar">
       <p>Pokédex Entries</p>
       {pokemonList}
     </div>

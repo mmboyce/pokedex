@@ -107,7 +107,9 @@ function Type(props) {
 
   const typesText = types.map((typeObject) => typeObject.type.name);
 
-  const typeElement = typesText.map((text) => <div className={`type ${text}`}>{text}</div>);
+  const typeElement = typesText.map((text) => (
+    <div className={`type ${text}`} key={text}>{text}</div>
+  ));
 
   return (
     <div id="types">
@@ -331,7 +333,7 @@ class Pokedex extends React.Component {
     const pokedexContent = (
       <div id="pokedex-content">
         <div id="display">
-          <p id="id-text">
+          <p id="id-text" data-testid="id-text">
             #
             {id}
           </p>
@@ -368,7 +370,7 @@ class Pokedex extends React.Component {
     );
 
     return (
-      <div id="pokedex" className={className}>
+      <div id="pokedex" className={className} data-testid="pokedex">
         {redirect ? redirectTo : pokedexContent}
       </div>
     );

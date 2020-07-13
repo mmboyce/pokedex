@@ -15,8 +15,6 @@ import Pokedex from './components/Pokedex';
 import './App.css';
 import 'normalize.css';
 
-// TODO TEST: Test all functions
-
 const pokeApiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
 /**
@@ -34,7 +32,10 @@ const appKeys = {
  * @returns {string} The ID as a string.
  */
 function getIdFromUrl(url) {
-  const urlPieces = url.split('/');
+  const doesUrlEndsWithSlash = url.charAt(url.length - 1) === '/';
+  const formattedUrl = doesUrlEndsWithSlash ? url : `${url}/`;
+
+  const urlPieces = formattedUrl.split('/');
   // the second to last piece of the url contains the ID of the pokemon
   const id = urlPieces[urlPieces.length - 2];
 
@@ -58,7 +59,11 @@ function LoadingScreen(props) {
   const { className } = props;
 
   return (
-    <div id="loading-screen" className={className}>
+    <div
+      id="loading-screen"
+      className={className}
+      data-testid="loading-screen"
+    >
       <div id="loading-center">
         Pokédex
       </div>
@@ -130,7 +135,7 @@ function MainContainer(props) {
   localStorage.setItem(appKeys.redirect, `/${id}`);
 
   return (
-    <div id="main-container">
+    <div id="main-container" data-testid="main-container">
       <Search results={results} onFocus={handleSearchBoxFocus} onBlur={handleSearchBoxLoseFocus} />
       {pokedex}
     </div>
@@ -153,6 +158,7 @@ class App extends React.Component {
 
     this.fetchAllPokemon = this.fetchAllPokemon.bind(this);
     this.formatResults = this.formatResults.bind(this);
+    this.handleError = this.handleError.bind(this);
 
     this.state = {
       // Results will contain the list of all pokemon names and their ID's
@@ -167,8 +173,7 @@ class App extends React.Component {
    * @memberof App
    */
   componentDidMount() {
-    // TODO TEST: Handle errors differently
-    this.fetchAllPokemon().then(this.formatResults).catch((error) => { console.log(error); });
+    this.fetchAllPokemon().then(this.formatResults).catch(this.handleError);
   }
 
   /**
@@ -194,7 +199,7 @@ class App extends React.Component {
    */
   async fetchAllPokemon() {
     // ?limit=-1 allows us to request all pokemon in the databses
-    const response = await fetch(`${pokeApiUrl}?limit=-1`, { mode: 'cors' });
+    const response = await fetch(`${pokeApiUrl}?limit=-1/`, { mode: 'cors' });
 
     if (response.ok) {
       const data = await response.json();
@@ -203,11 +208,24 @@ class App extends React.Component {
 
       this.setState({
         results,
+        errorMsg: undefined,
       });
 
       return results;
     }
     throw new Error(response.status);
+  }
+
+  /**
+   * This method accepts an error as a paremeter and places the message
+   * into state for it to be displayed by the component.
+   * @param {Error} error The error passed into the method.
+   */
+  handleError(error) {
+    this.setState({
+      isLoaded: true,
+      errorMsg: error.message,
+    });
   }
 
   /**
@@ -230,14 +248,30 @@ class App extends React.Component {
    * this.fetchAllPokemon().then(this.formatResults)
    */
   formatResults(results) {
+    let index;
+    let alternatesNotReachedYet = true;
+    let firstPokemon = true;
+
     const formattedList = results.filter((pokemon) => {
       // remove alternates from results
       const { url } = pokemon;
       const id = getIdFromUrl(url);
 
+      if (firstPokemon) {
+        index = id;
+        firstPokemon = false;
+      } else {
+        index = +index + 1;
+      }
+
       // once the ID's cease to be sequential and jump to 5 digit numbers,
       // these pokemon should not be included
-      return (!(id > 10000));
+      // While it's sequential, all id's minus index should equal 0
+      if (id - index !== 0) {
+        alternatesNotReachedYet = false;
+      }
+
+      return (alternatesNotReachedYet);
     }).map((pokemon) => {
       // Now that the alternates have been filtered out, format names, and get IDs
       const { name } = pokemon;
@@ -261,14 +295,14 @@ class App extends React.Component {
   }
 
   render() {
-    const { results, isLoaded } = this.state;
+    const { results, isLoaded, errorMsg } = this.state;
 
     const storedID = localStorage.getItem(appKeys.redirect);
     const indexRedirectTo = storedID === null ? '/1' : storedID;
 
     // LoadedBody is used so that we do not try to pass props from an asynchronous call
     // before the state is ready for it
-    const loadedBody = (
+    const loadedBody = errorMsg === undefined ? (
       <Router>
         <List results={results} />
         <Switch>
@@ -280,18 +314,32 @@ class App extends React.Component {
           </Route>
         </Switch>
       </Router>
-    );
+    )
+      : <></>;
 
     const loadingScreen = isLoaded
       ? <LoadingScreen className="loaded" />
       : <LoadingScreen />;
 
+    const errorElement = errorMsg === undefined
+      ? <></> : (
+        <div
+          id=".error-msg"
+          data-testid="error-msg-app"
+        >
+          Error when fetching list of all Pokémon:
+          {' '}
+          {errorMsg}
+        </div>
+      );
+
     const appBody = isLoaded
       ? loadedBody : <></>;
 
     return (
-      <div className="App">
+      <div className="App" data-testid="App-Root">
         {loadingScreen}
+        {errorElement}
         {appBody}
       </div>
     );
@@ -299,7 +347,7 @@ class App extends React.Component {
 }
 
 LoadingScreen.propTypes = {
-  className: PropTypes.string,
+  className: PropTypes.oneOf(['', 'loaded']),
 };
 
 LoadingScreen.defaultProps = {
@@ -319,3 +367,4 @@ MainContainer.propTypes = {
 };
 
 export default App;
+export { LoadingScreen, MainContainer, getIdFromUrl };
