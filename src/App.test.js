@@ -104,7 +104,7 @@ describe('Format Results', () => {
   });
 });
 
-describe('Respone not ok', () => {
+describe('Response not ok', () => {
   let mockFetchPromise;
 
   // setup mock
@@ -122,6 +122,6 @@ describe('Respone not ok', () => {
   test('Displays error message', async () => {
     render(<App />);
 
-    expect(await screen.findByTestId('error-msg-app')).toBeInTheDocument();
+    expect(await screen.findByTestId('error-msg')).toBeInTheDocument();
   });
 });

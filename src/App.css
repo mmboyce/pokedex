@@ -54,12 +54,3 @@
   z-index: -1;
   transition: filter 1s, opacity 1s;
 }
-
-.error-msg {
-  margin: auto;
-  height: 2em;
-  padding: 2em;
-  background-color: black;
-  color: white;
-  border-radius: 10px;
-}

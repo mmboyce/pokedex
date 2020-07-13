@@ -11,6 +11,7 @@ import {
 import List from './components/List';
 import Search from './components/Search';
 import Pokedex from './components/Pokedex';
+import ErrorDisplay from './components/ErrorDisplay';
 
 import './App.css';
 import 'normalize.css';
@@ -323,14 +324,7 @@ class App extends React.Component {
 
     const errorElement = errorMsg === undefined
       ? <></> : (
-        <div
-          id=".error-msg"
-          data-testid="error-msg-app"
-        >
-          Error when fetching list of all Pokémon:
-          {' '}
-          {errorMsg}
-        </div>
+        <ErrorDisplay errWhen="trying to fetch list of all Pokémon" message="errorMsg" />
       );
 
     const appBody = isLoaded
