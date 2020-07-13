@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import Pokedex, { loadingText } from '../components/Pokedex';
-import renderWithRouter from './helpers';
+import renderWithRouter from '../testHelpers';
 
 describe('Component mounts with mock data', () => {
   let mockSuccessResponse;

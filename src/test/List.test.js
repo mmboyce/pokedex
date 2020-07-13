@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import renderWithRouter from './helpers';
+import renderWithRouter from '../testHelpers';
 import List from '../components/List';
 
 describe('Component mounts', () => {

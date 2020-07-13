@@ -3,7 +3,7 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import { MainContainer } from '../App';
-import renderWithRouter from './helpers';
+import renderWithRouter from '../testHelpers';
 
 /**
  * @type {Array}
