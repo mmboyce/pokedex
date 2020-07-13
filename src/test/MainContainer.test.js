@@ -1,27 +1,9 @@
 import React from 'react';
 import {
-  render, fireEvent,
+  fireEvent,
 } from '@testing-library/react';
-import { Route, MemoryRouter } from 'react-router-dom';
 import { MainContainer } from '../App';
-
-/**
- * This method is a helper to provide url params to mainContainer,
- * kinda like a mock. It accomplishes this by wrapping the children in
- * a MemoryRouter.
- * @param {JSX.Element[]} children An array of elements to wrap
- * @param {string[]} routeEntries The route entries to mock.
- * @returns {JSX.Element} The children wrapped in a MemoryRouter.
- */
-const renderWithRouter = (children, routeEntries) => (
-  render(
-    <MemoryRouter initialEntries={routeEntries}>
-      <Route path="/:id">
-        {children}
-      </Route>
-    </MemoryRouter>,
-  )
-);
+import renderWithRouter from './helpers';
 
 /**
  * @type {Array}
