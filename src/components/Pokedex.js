@@ -5,6 +5,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import ErrorDisplay from './ErrorDisplay';
+
 import './Pokedex.css';
 
 const loadingSvgSrc = `${process.env.PUBLIC_URL}/img/loading.svg`;
@@ -144,6 +146,7 @@ class Pokedex extends React.Component {
     this.handleLoadChange = this.handleLoadChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleNavClick = this.handleNavClick.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   /**
@@ -153,14 +156,13 @@ class Pokedex extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
 
-    // TODO TEST: Handle errors differently
     this.fetchInfo()
-      .catch((error) => alert(error));
+      .catch(this.handleError);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { id, className } = this.props;
-    const { sprite, redirect } = this.state;
+    const { sprite, redirect, errMsg } = this.state;
 
     // These checks are to prevent against constant pulling of JSON and slowing down
     // the application
@@ -170,21 +172,22 @@ class Pokedex extends React.Component {
     const nextSpriteIsDifferentFromCurrentSprite = sprite !== nextState.sprite;
     const redirectIsNecessary = redirect === false && nextState.redirect !== false;
     const didClassNameChange = className !== nextProps.className;
+    const isErrorThrown = errMsg !== nextState.errMsg;
 
     return currentIdDoesNotMatchNextId
       || currentSpriteIsUndefinedAndNextSpriteIsNot
       || nextSpriteIsDifferentFromCurrentSprite
       || redirectIsNecessary
-      || didClassNameChange;
+      || didClassNameChange
+      || isErrorThrown;
   }
 
   /**
    * Each time we receive different props, we must fetch the info again.
    */
   componentDidUpdate() {
-  // TODO TEST: Handle errors differently
     this.fetchInfo()
-      .catch((error) => alert(error));
+      .catch(this.handleError);
   }
 
   /**
@@ -236,6 +239,17 @@ class Pokedex extends React.Component {
     } else {
       throw new Error(response.status);
     }
+  }
+
+  /**
+   * This method accepts an error as a paremeter and places the message
+   * into state for it to be displayed by the component.
+   * @param {Error} error The error passed into the method.
+   */
+  handleError(error) {
+    this.setState({
+      errMsg: error.message,
+    });
   }
 
   /**
@@ -311,7 +325,7 @@ class Pokedex extends React.Component {
     // if redirect is not false, then we need to redirect to where the
     // key press has indicated.
     // This is workaround for useHistory not being available to component classes.
-    const { redirect } = this.state;
+    const { redirect, errMsg } = this.state;
 
     const redirectTo = <Redirect to={redirect} />;
 
@@ -343,26 +357,26 @@ class Pokedex extends React.Component {
           {types !== undefined ? <Type types={types} /> : ''}
         </div>
         <div id="buttons">
-          <Link to={`/${prev}`} onClick={this.handleNavClick}>Prev</Link>
-          <Link to={`/${next}`} onClick={this.handleNavClick}>Next</Link>
+          <Link to={`/${prev}`} onClick={this.handleNavClick} data-testid="prev">Prev</Link>
+          <Link to={`/${next}`} onClick={this.handleNavClick} data-testid="next">Next</Link>
         </div>
         <div id="stat-container">
           <div id="stats">
             <div className="stat-line">
               <div className="stat-left">Name:</div>
-              <div className="stat-right">
+              <div className="stat-right" data-testid="name">
                 {displayName}
               </div>
             </div>
             <div className="stat-line">
               <div className="stat-left">Height:</div>
-              <div className="stat-right">
+              <div className="stat-right" data-testid="height">
                 {displayHeight === loadingText ? loadingText : `${displayHeight}m`}
               </div>
             </div>
             <div className="stat-line">
               <div className="stat-left">Weight:</div>
-              <div className="stat-right">
+              <div className="stat-right" data-testid="weight">
                 {displayWeight === loadingText ? loadingText : `${displayWeight}kg`}
               </div>
             </div>
@@ -371,8 +385,13 @@ class Pokedex extends React.Component {
       </div>
     );
 
+    const errorDisplay = errMsg === undefined
+      ? <></>
+      : <ErrorDisplay errWhen="trying to load Pokémon data" message={errMsg} />;
+
     return (
       <div id="pokedex" className={className} data-testid="pokedex">
+        {errorDisplay}
         {redirect ? redirectTo : pokedexContent}
       </div>
     );
@@ -404,4 +423,6 @@ Pokedex.propTypes = {
 };
 
 export default Pokedex;
-export { Type, Sprite, spriteStates, loadingSvgSrc };
+export {
+  Type, Sprite, spriteStates, loadingSvgSrc, loadingText,
+};
