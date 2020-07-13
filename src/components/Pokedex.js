@@ -112,7 +112,7 @@ function Type(props) {
   ));
 
   return (
-    <div id="types">
+    <div id="types" data-testid="types">
       {typeElement}
     </div>
   );
@@ -402,3 +402,4 @@ Pokedex.propTypes = {
 };
 
 export default Pokedex;
+export { Type, Sprite };
