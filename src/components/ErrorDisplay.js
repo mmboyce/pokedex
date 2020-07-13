@@ -10,7 +10,7 @@ function ErrorDisplay(props) {
       id=".error-msg"
       data-testid="error-msg"
     >
-      {`$Error when ${errWhen}: ${message}`}
+      {`Error when ${errWhen}: ${message}`}
     </div>
   );
 }
