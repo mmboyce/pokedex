@@ -7,7 +7,7 @@ function ErrorDisplay(props) {
   const { errWhen, message } = props;
   return (
     <div
-      id=".error-msg"
+      className=".error-msg"
       data-testid="error-msg"
     >
       {`Error when ${errWhen}: ${message}`}
