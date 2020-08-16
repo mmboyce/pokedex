@@ -105,7 +105,7 @@ function MainContainer(props) {
   if (id > limit) {
   // If the ID param is greater than the limit redirect to the last pokemon.
     pokedex = <Redirect to={`/${limit}`} />;
-  } else if (id < 1 || (!(id <= 807) && !(id >= 1))) {
+  } else if (id < 1 || (!(id <= limit) && !(id >= 1))) {
     // If the ID param is less than 1 or does not fall within the bounds,
     // redirect to the first pokemon.
 
