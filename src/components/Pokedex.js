@@ -228,7 +228,7 @@ class Pokedex extends React.Component {
       const data = await response.json();
 
       let { name, weight, height } = data;
-      const sprite = data.sprites.front_default;
+      const { front_default: sprite } = data.sprites;
 
       const { types } = data;
 
